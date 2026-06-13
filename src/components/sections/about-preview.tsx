@@ -59,13 +59,13 @@ export default function AboutPreview() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="pt-28 pb-20 md:pt-36 md:pb-28 bg-white" id="about-preview">
+    <section ref={sectionRef} className="mt-20 md:mt-28 pt-20 pb-20 md:pt-24 md:pb-28 bg-white" id="about-preview">
       <div className="container-luxury">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mt-6 md:mt-10">
           {/* Image */}
           <div
             ref={imageRef}
-            className="relative aspect-[4/5] bg-beige-light overflow-hidden mt-8 md:mt-12"
+            className="relative aspect-[4/5] bg-beige-light overflow-hidden"
           >
             <Image
               src="/images/Luxury Lobby Interior.png"
