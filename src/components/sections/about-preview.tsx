@@ -86,11 +86,11 @@ export default function AboutPreview() {
               className="!mb-6"
             />
 
-            <p className="body-large mb-6">
+            <p className="text-sm md:text-base text-dark-soft/80 font-light leading-relaxed mb-6">
               Welcome to The Corniche Hotel, your top-rated hotel in Lekki Lagos. Inspired by the elegance of the 1970 Rolls Royce Corniche, we offer a blend of affordable luxury, tasteful décor, and exceptional guest service. Whether you’re on a business trip or a relaxing getaway, enjoy a seamless stay at a boutique hotel in Lekki that feels like home.
             </p>
 
-            <p className="text-muted leading-relaxed mb-8">
+            <p className="text-sm md:text-base text-dark-soft/80 font-light leading-relaxed mb-8">
               Our rooms are thoughtfully designed, and our location places you close to everything in Lekki. With premium amenities including free Wi-Fi, on-site fine dining, and outstanding hospitality, we are the go-to choice for those seeking a luxury hotel in Lagos, Lekki Phase 1 accommodation,  an hotel with restaurant in lekki, or simply where to stay in Lekki.
             </p>
 

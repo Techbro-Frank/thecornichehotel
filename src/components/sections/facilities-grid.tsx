@@ -62,31 +62,63 @@ export default function FacilitiesGrid() {
           description="Every aspect of your stay has been considered. From wellness to dining, we ensure an experience of uncompromising quality."
         />
 
-        <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {facilities.map((facility) => {
-            const IconComp = facility.icon;
-            return (
-              <div
-                key={facility.name}
-                className="facility-card group p-6 md:p-8 border border-border bg-beige/50 hover:bg-white hover:shadow-card hover:border-gold/30 transition-all text-center cursor-default"
-                style={{
-                  transitionDuration: "var(--duration-normal)",
-                  transitionTimingFunction: "var(--ease-luxury)",
-                }}
-              >
-                <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center border border-gold/30 text-gold group-hover:bg-gold group-hover:text-dark transition-all"
-                     style={{ transitionDuration: "var(--duration-normal)" }}>
-                  <IconComp size={20} />
+        {/* Split Rows: Row 1 has 2 centered cards, Row 2 has 3 centered cards */}
+        <div ref={gridRef} className="flex flex-col gap-4 md:gap-6 mt-12 w-full max-w-4xl mx-auto">
+          {/* Top Row: 2 Centered Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full max-w-2xl mx-auto">
+            {facilities.slice(0, 2).map((facility) => {
+              const IconComp = facility.icon;
+              return (
+                <div
+                  key={facility.name}
+                  className="facility-card group p-6 md:p-8 border border-border bg-beige/50 hover:bg-white hover:shadow-card hover:border-gold/30 transition-all text-center cursor-default w-full"
+                  style={{
+                    transitionDuration: "var(--duration-normal)",
+                    transitionTimingFunction: "var(--ease-luxury)",
+                  }}
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center border border-gold/30 text-gold group-hover:bg-gold group-hover:text-dark transition-all"
+                       style={{ transitionDuration: "var(--duration-normal)" }}>
+                    <IconComp size={20} />
+                  </div>
+                  <h4 className="text-sm font-medium text-dark tracking-wide mb-1">
+                    {facility.name}
+                  </h4>
+                  <p className="text-[12px] text-muted leading-relaxed">
+                    {facility.description}
+                  </p>
                 </div>
-                <h4 className="text-sm font-medium text-dark tracking-wide mb-1">
-                  {facility.name}
-                </h4>
-                <p className="text-[12px] text-muted leading-relaxed">
-                  {facility.description}
-                </p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Bottom Row: 3 Centered Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 w-full">
+            {facilities.slice(2).map((facility) => {
+              const IconComp = facility.icon;
+              return (
+                <div
+                  key={facility.name}
+                  className="facility-card group p-6 md:p-8 border border-border bg-beige/50 hover:bg-white hover:shadow-card hover:border-gold/30 transition-all text-center cursor-default w-full"
+                  style={{
+                    transitionDuration: "var(--duration-normal)",
+                    transitionTimingFunction: "var(--ease-luxury)",
+                  }}
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center border border-gold/30 text-gold group-hover:bg-gold group-hover:text-dark transition-all"
+                       style={{ transitionDuration: "var(--duration-normal)" }}>
+                    <IconComp size={20} />
+                  </div>
+                  <h4 className="text-sm font-medium text-dark tracking-wide mb-1">
+                    {facility.name}
+                  </h4>
+                  <p className="text-[12px] text-muted leading-relaxed">
+                    {facility.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

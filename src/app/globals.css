@@ -35,7 +35,7 @@
   --color-ring: var(--color-gold);
 
   /* Typography */
-  --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-heading: var(--font-body);
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
 
   /* Fluid Typography Scale */

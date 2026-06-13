@@ -9,11 +9,19 @@ import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export default function Navbar() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    // If on /rooms page, keep it permanently visible and styled from mount
+    const isRoomsPage = window.location.pathname.startsWith("/rooms");
+    if (isRoomsPage) {
+      setIsVisible(true);
+      setIsScrolled(true);
+      return;
+    }
+
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsVisible(scrollY > 150);
@@ -46,7 +54,7 @@ export default function Navbar() {
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-4 pointer-events-none",
           isScrolled
-            ? "bg-white/95 backdrop-blur-md shadow-soft py-3 border-b border-border-light"
+            ? "bg-white/95 backdrop-blur-md shadow-soft py-3 border-b border-border-light text-dark"
             : "bg-transparent py-5"
         )}
         style={{
