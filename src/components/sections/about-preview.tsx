@@ -65,7 +65,7 @@ export default function AboutPreview() {
           {/* Image */}
           <div
             ref={imageRef}
-            className="relative aspect-[4/5] bg-beige-light overflow-hidden"
+            className="relative aspect-[4/5] bg-beige-light overflow-hidden mt-8 md:mt-12"
           >
             <Image
               src="/images/Luxury Lobby Interior.png"
