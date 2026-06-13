@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,11 +50,17 @@ export default function DiningSection() {
     <section ref={sectionRef} className="relative overflow-hidden" id="dining">
       {/* Full-width Image with Parallax */}
       <div className="relative h-[70vh] md:h-[80vh] overflow-hidden">
-        <div className="dining-image absolute inset-0 scale-110 bg-gradient-to-br from-dark-soft to-dark flex items-center justify-center">
-          <div className="text-center">
-            <p className="label-uppercase !text-gold-light mb-2">Restaurant Photo</p>
-            <p className="text-sm text-white/40">Fine Dining Experience</p>
-          </div>
+        <div className="dining-image absolute inset-0 w-full h-[120%] -top-[10%]">
+          <Image
+            src="/images/Corniche-bistro-restaurant.png"
+            alt="Corniche Bistro & Restaurant"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+          {/* Subtle overlay to enhance text contrast */}
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
         {/* Content Overlay */}

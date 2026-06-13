@@ -346,3 +346,30 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold);
 }
+
+/* ─── Sci-Fi Gold Glow & Sheen Animations ────────────────── */
+@keyframes border-glow-breath {
+  0% {
+    box-shadow: 0 0 8px rgba(207, 167, 133, 0.2), inset 0 0 3px rgba(207, 167, 133, 0.05);
+    border-color: rgba(207, 167, 133, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(207, 167, 133, 0.65), inset 0 0 10px rgba(207, 167, 133, 0.2);
+    border-color: rgba(207, 167, 133, 0.85);
+  }
+}
+
+@keyframes sheen {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  50% { transform: translateX(100%) skewX(-15deg); }
+  100% { transform: translateX(100%) skewX(-15deg); }
+}
+
+.shadow-gold-glow {
+  animation: border-glow-breath 3s ease-in-out infinite alternate;
+}
+
+.animate-sheen {
+  animation: sheen 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+

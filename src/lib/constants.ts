@@ -8,15 +8,13 @@ export const BRAND = {
   website: "https://thecornichehotel.com",
 } as const;
 
-// ─── Navigation ──────────────────────────────────────────
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
+  { label: "About Us", href: "/about" },
   { label: "Rooms & Suites", href: "/rooms" },
-  { label: "Dining", href: "/dining" },
+  { label: "The Corniche Bistro", href: "/dining" },
   { label: "Gallery", href: "/gallery" },
-  { label: "Offers", href: "/offers" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact Us", href: "/contact" },
 ] as const;
 
 // ─── Room Types ──────────────────────────────────────────

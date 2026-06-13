@@ -196,6 +196,20 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Fixed 'Contact Us' Right Side Button */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 hidden md:block">
+        <Link
+          href="/contact"
+          className="block bg-black text-[#F5F1EB] hover:bg-[#CFA785] hover:text-black border-l border-t border-b border-gold/30 px-4 py-8 uppercase tracking-[0.25em] text-[12px] font-semibold transition-all duration-300 shadow-lg [writing-mode:vertical-lr]"
+          style={{
+            letterSpacing: "0.25em",
+            boxShadow: "-6px 6px 24px rgba(0, 0, 0, 0.2)"
+          }}
+        >
+          Contact Us
+        </Link>
+      </div>
     </>
   );
 }

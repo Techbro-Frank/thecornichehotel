@@ -18,11 +18,8 @@ import SectionHeading from "@/components/shared/section-heading";
 gsap.registerPlugin(ScrollTrigger);
 
 const facilities = [
-  { icon: Waves, name: "Infinity Pool", description: "Rooftop pool with panoramic Lagos views" },
-  { icon: Dumbbell, name: "Fitness Centre", description: "State-of-the-art equipment & personal trainers" },
   { icon: Utensils, name: "Fine Dining", description: "Award-winning restaurant & private dining" },
   { icon: Wine, name: "Lounge & Bar", description: "Curated cocktails in an elegant atmosphere" },
-  { icon: Car, name: "Valet Parking", description: "Complimentary valet service for all guests" },
   { icon: Wifi, name: "High-Speed WiFi", description: "Complimentary fibre connection throughout" },
   { icon: ShieldCheck, name: "24/7 Security", description: "Advanced security & in-room safe" },
   { icon: Sparkles, name: "Spa & Wellness", description: "Signature treatments & relaxation therapies" },

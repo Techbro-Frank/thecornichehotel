@@ -111,14 +111,34 @@ export default function AboutPreview() {
               ))}
             </div>
 
-            <a
-              href="/about"
-              className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-dark hover:text-gold transition-colors group"
-              style={{ transitionDuration: "var(--duration-normal)" }}
-            >
-              Discover Our Story
-              <span className="w-8 h-[1px] bg-gold transition-all group-hover:w-12" />
-            </a>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 mt-10">
+              <a
+                href="/about"
+                className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-dark hover:text-gold transition-colors group"
+                style={{ transitionDuration: "var(--duration-normal)" }}
+              >
+                Discover Our Story
+                <span className="w-8 h-[1px] bg-gold transition-all group-hover:w-12" />
+              </a>
+
+              <a
+                href="https://bodylawsonstudios360virtualtours.s3.us-east-2.amazonaws.com/THE+CORNICHE+HOTEL.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative overflow-hidden inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-dark text-white border border-gold/45 text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 hover:text-gold hover:border-gold shadow-gold-glow hover:scale-[1.03] active:scale-[0.98] cursor-pointer group/tour"
+              >
+                {/* Moving sci-fi laser sheen scanner */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full animate-sheen" />
+                
+                {/* Glowing status dot */}
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-gold"></span>
+                </span>
+                
+                <span className="relative z-10 font-medium tracking-[0.2em]">Click here to take a virtual tour</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -3,14 +3,10 @@ import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
 import BookingWidget from "@/components/booking/booking-widget";
 import AboutPreview from "@/components/sections/about-preview";
-import FeaturedRooms from "@/components/sections/featured-rooms";
+import RoomShowcase from "@/components/sections/room-showcase";
 import DiningSection from "@/components/sections/dining-section";
 import FacilitiesGrid from "@/components/sections/facilities-grid";
 import Testimonials from "@/components/sections/testimonials";
-import VirtualTourPreview from "@/components/sections/virtual-tour-preview";
-import GalleryPreview from "@/components/sections/gallery-preview";
-import OffersPreview from "@/components/sections/offers-preview";
-import InstagramPlaceholder from "@/components/sections/instagram-placeholder";
 
 export default function Home() {
   return (
@@ -31,8 +27,8 @@ export default function Home() {
           {/* About Corniche */}
           <AboutPreview />
 
-          {/* Featured Rooms & Suites */}
-          <FeaturedRooms />
+          {/* Luxury Room Showcase (Replaced Featured Rooms) */}
+          <RoomShowcase />
 
           {/* Dining Experience */}
           <DiningSection />
@@ -42,18 +38,6 @@ export default function Home() {
 
           {/* Guest Testimonials */}
           <Testimonials />
-
-          {/* Virtual Tour Preview */}
-          <VirtualTourPreview />
-
-          {/* Photo Gallery */}
-          <GalleryPreview />
-
-          {/* Special Offers */}
-          <OffersPreview />
-
-          {/* Instagram Feed */}
-          <InstagramPlaceholder />
           
           <Footer />
         </div>
