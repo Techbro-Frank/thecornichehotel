@@ -1,3 +1,11 @@
+/**
+ * @file HeroSection — Full-screen video hero with typewriter text animation
+ * @description Renders a looping background video with a sequential typewriter effect
+ *   that types out the brand label, headline, and subheading one character at a time.
+ *   After typing completes, GSAP animates the gold divider, CTA buttons, and scroll
+ *   indicator into view with a staggered timeline.
+ */
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -5,10 +13,12 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ChevronDown } from "lucide-react";
 
+/* ─── Static Hero Copy ─────────────────────────────────── */
 const labelText = "The Corniche Hotel";
 const headlineText = "Experience Refined Luxury in Lekki";
 const subheadingText = "Luxury accommodation, exceptional dining, and unforgettable hospitality.";
 
+/** Full-screen hero with video background and sequential typewriter text reveal. */
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -23,6 +33,9 @@ export default function HeroSection() {
   const [activeCursor, setActiveCursor] = useState<"label" | "headline" | "subheading" | null>("label");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
+  /* ── Typewriter Effect ─────────────────────────────────
+   * Types label → headline → subheading sequentially.
+   * Each function chains into the next after its text is fully typed. */
   useEffect(() => {
     let timer: NodeJS.Timeout;
     
@@ -61,6 +74,9 @@ export default function HeroSection() {
     return () => clearTimeout(timer);
   }, []);
 
+  /* ── Post-Typing GSAP Timeline ─────────────────────────
+   * Runs only after all text is typed. Animates the gold divider (scaleX),
+   * CTA buttons (stagger fade-up), and the scroll indicator. */
   useEffect(() => {
     if (!isTypingComplete) return;
 

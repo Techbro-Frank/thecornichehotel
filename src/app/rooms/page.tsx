@@ -1,3 +1,11 @@
+/**
+ * @file Rooms & Suites Page — Full room listing with detail cards
+ * @description Dedicated rooms page displaying all 9 room types in a 2-column grid.
+ *   Each RoomDetailCard features direction-aware hover overlays (same system as the
+ *   homepage showcase), room specs (size, max adults, max children), pricing, and
+ *   booking CTAs. Includes a decorative classical "Share" button with notched SVG border.
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -6,6 +14,7 @@ import Image from "next/image";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
+/** Room type definition with extended details for the rooms page. */
 interface RoomDetails {
   name: string;
   price: string;

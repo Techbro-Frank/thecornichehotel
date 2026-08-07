@@ -1,3 +1,11 @@
+/**
+ * @file SectionHeading — Reusable animated section header component
+ * @description Renders a consistent label + title + optional description pattern used
+ *   across all major sections. Supports left/center alignment and light (dark bg) /
+ *   dark (light bg) color themes. Child elements animate in via GSAP ScrollTrigger
+ *   with staggered fade-up on first scroll into viewport.
+ */
+
 "use client";
 
 import { useRef, useEffect } from "react";
@@ -7,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Props for the SectionHeading component. */
 interface SectionHeadingProps {
   label?: string;
   title: string;

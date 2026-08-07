@@ -1,3 +1,11 @@
+/**
+ * @file DiningSection — Full-width parallax dining showcase
+ * @description Immersive section featuring a GSAP-driven parallax background image
+ *   of the Corniche Bistro & Restaurant. Content overlay fades up from the bottom
+ *   with a gradient for text legibility. Promotes the hotel's culinary experience
+ *   with a link to the full dining/menu page.
+ */
+
 "use client";
 
 import { useRef, useEffect } from "react";
@@ -8,6 +16,7 @@ import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Dining section with parallax background image and scroll-triggered content reveal. */
 export default function DiningSection() {
   const sectionRef = useRef<HTMLElement>(null);
 

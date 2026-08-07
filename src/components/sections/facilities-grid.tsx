@@ -1,3 +1,10 @@
+/**
+ * @file FacilitiesGrid — Hotel amenities showcase
+ * @description Displays hotel facilities in a centered split-row layout (2 top + 3 bottom)
+ *   with Lucide icons. Each card animates in via GSAP ScrollTrigger with staggered delays.
+ *   Cards feature hover states with gold icon background fills for premium interactivity.
+ */
+
 "use client";
 
 import { useRef, useEffect } from "react";
@@ -17,6 +24,7 @@ import SectionHeading from "@/components/shared/section-heading";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* ─── Facility Data ─────────────────────────────────────── */
 const facilities = [
   { icon: Utensils, name: "Fine Dining", description: "Award-winning restaurant & private dining" },
   { icon: Wine, name: "Lounge & Bar", description: "Curated cocktails in an elegant atmosphere" },

@@ -1,3 +1,11 @@
+/**
+ * @file Root Layout — The Corniche Hotel
+ * @description Application shell that wraps every page. Defines global SEO metadata
+ *   (Open Graph, Twitter Cards, robots directives), loads custom fonts (Playfair Display
+ *   for headings, Inter for body), and nests the QueryProvider (React Query) and
+ *   LenisProvider (smooth-scroll) around all page content.
+ */
+
 import type { Metadata } from "next";
 import { playfairDisplay, inter } from "@/lib/fonts";
 import LenisProvider from "@/providers/lenis-provider";

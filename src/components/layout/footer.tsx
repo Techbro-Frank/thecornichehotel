@@ -1,3 +1,11 @@
+/**
+ * @file Footer — Site-wide footer with newsletter, links, and contact info
+ * @description Dark-themed footer with four sections: newsletter signup form with email
+ *   input, quick navigation links, legal/information links, and contact details with
+ *   Lucide icons. Social media icons are hand-crafted inline SVGs (since Lucide removed
+ *   brand icons). Entire footer animates in with Framer Motion staggered reveal.
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -10,7 +18,9 @@ import {
 } from "lucide-react";
 import { BRAND, NAV_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 
-/* Inline SVG social icons — Lucide removed brand icons */
+/* ─── Custom Social Media SVG Icons ─────────────────────────
+ * Lucide removed brand icons, so these are inline SVG components
+ * matching the Lucide stroke style for visual consistency. */
 function IconInstagram({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

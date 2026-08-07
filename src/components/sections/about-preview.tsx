@@ -1,3 +1,11 @@
+/**
+ * @file AboutPreview — Hotel introduction section
+ * @description Two-column layout with a GSAP clip-path image reveal on the left
+ *   and staggered text content on the right. Features hotel stats (80+ rooms,
+ *   5★ rating, 24/7 concierge) and a virtual tour CTA with animated sheen effect.
+ *   All animations are scroll-triggered and play once when entering viewport.
+ */
+
 "use client";
 
 import { useRef, useEffect } from "react";
@@ -8,6 +16,7 @@ import SectionHeading from "@/components/shared/section-heading";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** About section with scroll-triggered image reveal and staggered content animation. */
 export default function AboutPreview() {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -129,13 +138,13 @@ export default function AboutPreview() {
               >
                 {/* Moving sci-fi laser sheen scanner */}
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full animate-sheen" />
-                
+
                 {/* Glowing status dot */}
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-gold"></span>
                 </span>
-                
+
                 <span className="relative z-10 font-medium tracking-[0.2em]">Click here to take a virtual tour</span>
               </a>
             </div>

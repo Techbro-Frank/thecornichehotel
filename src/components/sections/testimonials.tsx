@@ -1,3 +1,11 @@
+/**
+ * @file Testimonials — Guest reviews carousel with rating modal
+ * @description Dark-themed section with an animated testimonial carousel (Framer Motion).
+ *   Features navigation arrows, dot indicators, and a "Rate Us" popup modal where guests
+ *   can submit star ratings and written reviews. New reviews are prepended to the
+ *   carousel list (client-side only — no backend persistence yet).
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -5,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote, Plus, Star, X } from "lucide-react";
 import SectionHeading from "@/components/shared/section-heading";
 
+/** Shape of a single guest testimonial. */
 interface TestimonialItem {
   quote: string;
   name: string;

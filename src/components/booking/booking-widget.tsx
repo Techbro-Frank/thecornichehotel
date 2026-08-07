@@ -1,3 +1,11 @@
+/**
+ * @file BookingWidget — Floating booking bar with date & guest selection
+ * @description Glassmorphism-styled booking widget that sits at the hero/content
+ *   transition point. Provides check-in/check-out date pickers with min-date logic,
+ *   adult/child counters with increment/decrement buttons, and a search CTA that
+ *   redirects to the booking page with query params for pre-filling.
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -11,6 +19,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 
+/** Booking widget with date pickers, guest counters, and availability search. */
 export default function BookingWidget() {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");

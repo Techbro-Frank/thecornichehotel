@@ -1,3 +1,11 @@
+/**
+ * @file Homepage — The Corniche Hotel
+ * @description Landing page that composes all major sections of the hotel website.
+ *   Uses a sticky hero pattern where the video hero stays pinned behind scrollable
+ *   content, creating a parallax-like layered scroll experience. The content container
+ *   slides up over the hero with a top shadow for depth.
+ */
+
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
@@ -8,6 +16,7 @@ import DiningSection from "@/components/sections/dining-section";
 import FacilitiesGrid from "@/components/sections/facilities-grid";
 import Testimonials from "@/components/sections/testimonials";
 
+/** Homepage — assembles the full landing experience with sticky hero + overlapping content. */
 export default function Home() {
   return (
     <>

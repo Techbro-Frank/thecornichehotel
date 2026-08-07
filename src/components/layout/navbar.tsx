@@ -1,3 +1,11 @@
+/**
+ * @file Navbar — Scroll-adaptive navigation with mobile overlay
+ * @description Fixed header that transitions from transparent (over the hero) to solid
+ *   white with backdrop blur after scrolling. On the /rooms page, it starts in solid mode.
+ *   Mobile menu opens a full-screen dark overlay with staggered Framer Motion link reveals.
+ *   Also renders a fixed vertical "Contact Us" button on the right side of the viewport.
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,6 +16,7 @@ import { Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
+/** Adaptive navbar with scroll-based transparency and mobile menu overlay. */
 export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(true);

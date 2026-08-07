@@ -1,3 +1,12 @@
+/**
+ * @file RoomShowcase — Visual gallery grid of hotel rooms & suites
+ * @description Renders a responsive 3-column grid of room cards, each featuring a
+ *   direction-aware hover overlay. On mouse enter, the overlay slides in from the
+ *   direction the cursor entered (top/right/bottom/left), revealing the room name
+ *   and price with a triple-line gold border frame animation. Uses Framer Motion
+ *   for overlay transitions and supports 9 room types from Standard to Presidential.
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -5,6 +14,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import Image from "next/image";
 import SectionHeading from "@/components/shared/section-heading";
 
+/** Room type definition for the showcase cards. */
 interface Room {
   name: string;
   price: string;
@@ -68,12 +78,12 @@ function ShowcaseCard({ room }: { room: Room }) {
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    
+
     const normalizedX = x / rect.width;
     const normalizedY = y / rect.height;
-    
+
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
-    
+
     let direction: "top" | "right" | "bottom" | "left" = "top";
     if (angle > -45 && angle <= 45) {
       direction = "right";
@@ -84,7 +94,7 @@ function ShowcaseCard({ room }: { room: Room }) {
     } else {
       direction = "top";
     }
-    
+
     setHoverDirection(direction);
     setIsHovered(true);
   };
@@ -94,12 +104,12 @@ function ShowcaseCard({ room }: { room: Room }) {
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    
+
     const normalizedX = x / rect.width;
     const normalizedY = y / rect.height;
-    
+
     const angle = Math.atan2(normalizedY, normalizedX) * (180 / Math.PI);
-    
+
     let direction: "top" | "right" | "bottom" | "left" = "top";
     if (angle > -45 && angle <= 45) {
       direction = "right";
@@ -110,7 +120,7 @@ function ShowcaseCard({ room }: { room: Room }) {
     } else {
       direction = "top";
     }
-    
+
     setHoverDirection(direction);
     setIsHovered(false);
   };
@@ -234,7 +244,7 @@ export default function RoomShowcase() {
           <span className="text-xs uppercase tracking-[0.3em] text-gold font-medium mb-6">
             Visual Gallery
           </span>
-          
+
           {/* Custom SVG Stepped-Notch Double-Border Frame */}
           <div className="relative w-[340px] max-w-full aspect-[340/90] flex items-center justify-center mb-4 px-8">
             <svg
