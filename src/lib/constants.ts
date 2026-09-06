@@ -2,10 +2,15 @@
 export const BRAND = {
   name: "The Corniche Hotel",
   tagline: "Luxury Redefined in Lekki",
-  address: "Lekki, Lagos, Nigeria",
-  phone: "+234 (0) 800 000 0000",
-  email: "reservations@thecornichehotel.com",
+  address: "2 Olaitan Senbanjo Street, Lekki Phase 1, Lagos, Nigeria",
+  /** General line — rooms, reservations, and everything not dining-specific. */
+  phone: "+234 903 460 0000",
+  /** Restaurant line — The Corniche Bistro only. */
+  restaurantPhone: "+234 903 470 0000",
+  email: "cornichehotelng@gmail.com",
   website: "https://thecornichehotel.com",
+  /** Live ANLI PMS booking link — every "Book Now" CTA site-wide points here. */
+  bookingUrl: "https://www.weareanli.com/corniche-hotel/8/booking",
 } as const;
 
 export const NAV_LINKS = [
@@ -13,9 +18,12 @@ export const NAV_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Rooms & Suites", href: "/rooms" },
   { label: "The Corniche Bistro", href: "/dining" },
-  { label: "Gallery", href: "/gallery" },
+  { label: "Ikoyi Apartments", href: "/ikoyi-apartments" },
   { label: "Contact Us", href: "/contact" },
 ] as const;
+
+export const CHECK_IN_TIME = "2:00 PM";
+export const CHECK_OUT_TIME = "12:00 Noon";
 
 // ─── Room Types ──────────────────────────────────────────
 export const ROOM_TYPES = [
@@ -28,11 +36,16 @@ export const ROOM_TYPES = [
 ] as const;
 
 // ─── Social Links ────────────────────────────────────────
+// Instagram is their primary channel — the hotel and the Bistro each run their
+// own account, and both should be reachable from the footer on every page.
+// Facebook is the only other real profile. No Twitter/X or LinkedIn presence.
+export const HOTEL_INSTAGRAM_URL = "https://www.instagram.com/thecornichehotel/?hl=en";
+export const BISTRO_INSTAGRAM_URL = "https://www.instagram.com/thecornichebistro/?hl=en";
+
 export const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com/thecornichehotel", icon: "instagram" },
-  { label: "Facebook", href: "https://facebook.com/thecornichehotel", icon: "facebook" },
-  { label: "X (Twitter)", href: "https://x.com/thecornichehotel", icon: "twitter" },
-  { label: "LinkedIn", href: "https://linkedin.com/company/thecornichehotel", icon: "linkedin" },
+  { label: "Instagram — Hotel", href: HOTEL_INSTAGRAM_URL, icon: "instagram" },
+  { label: "Instagram — Bistro", href: BISTRO_INSTAGRAM_URL, icon: "instagram" },
+  { label: "Facebook", href: "https://www.facebook.com/p/The-Corniche-Hotel-100064103440689/", icon: "facebook" },
 ] as const;
 
 // ─── Animation Defaults ─────────────────────────────────

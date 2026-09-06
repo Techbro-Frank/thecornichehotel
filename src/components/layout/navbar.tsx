@@ -11,21 +11,37 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { NAV_LINKS } from "@/lib/constants";
+import { BRAND, NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
+/** Pages that keep the nav permanently visible/sticky from mount. */
+const ALWAYS_VISIBLE_PATHS = [
+  "/rooms",
+  "/about",
+  "/ikoyi-apartments",
+  "/contact",
+  "/dining",
+  "/special-offers",
+  "/privacy",
+];
 
 /** Adaptive navbar with scroll-based transparency and mobile menu overlay. */
 export default function Navbar() {
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const isActiveLink = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
   useEffect(() => {
-    // If on /rooms page, keep it permanently visible and styled from mount
-    const isRoomsPage = window.location.pathname.startsWith("/rooms");
-    if (isRoomsPage) {
+    // Plain content pages keep the nav permanently visible/styled from mount
+    const path = window.location.pathname;
+    if (ALWAYS_VISIBLE_PATHS.some((p) => path.startsWith(p))) {
       setIsVisible(true);
       setIsScrolled(true);
       return;
@@ -83,68 +99,80 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
+          {/* Desktop Navigation + CTA, grouped together on the right */}
+          <div className="flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-5 xl:gap-6">
+              {NAV_LINKS.map((link) => {
+                const isActive = isActiveLink(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "relative text-[13px] font-medium tracking-[0.1em] uppercase transition-colors group",
+                      isScrolled
+                        ? isActive
+                          ? "text-gold"
+                          : "text-dark hover:text-gold"
+                        : isActive
+                          ? "text-white"
+                          : "text-white/90 hover:text-white"
+                    )}
+                    style={{ transitionDuration: "var(--duration-fast)" }}
+                  >
+                    {link.label}
+                    <span
+                      className={cn(
+                        "absolute -bottom-1 left-0 h-[1px] transition-all",
+                        isActive ? "w-full" : "w-0 group-hover:w-full",
+                        isScrolled ? "bg-gold" : "bg-white"
+                      )}
+                      style={{
+                        transitionDuration: "var(--duration-normal)",
+                        transitionTimingFunction: "var(--ease-luxury)",
+                      }}
+                    />
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Book Now CTA + Mobile Toggle */}
+            <div className="flex items-center gap-4">
+              <a
+                href={BRAND.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={cn(
-                  "relative text-[13px] font-medium tracking-[0.1em] uppercase transition-colors group",
+                  "hidden sm:inline-flex items-center px-6 py-2.5 text-[12px] font-medium tracking-[0.15em] uppercase transition-all",
                   isScrolled
-                    ? "text-dark hover:text-gold"
-                    : "text-white/90 hover:text-white"
+                    ? "bg-gold text-dark hover:bg-bronze"
+                    : "bg-white/15 text-white border border-white/30 hover:bg-white/25"
                 )}
-                style={{ transitionDuration: "var(--duration-fast)" }}
+                style={{
+                  transitionDuration: "var(--duration-normal)",
+                  transitionTimingFunction: "var(--ease-luxury)",
+                }}
               >
-                {link.label}
-                <span
-                  className={cn(
-                    "absolute -bottom-1 left-0 h-[1px] w-0 transition-all group-hover:w-full",
-                    isScrolled ? "bg-gold" : "bg-white"
-                  )}
-                  style={{
-                    transitionDuration: "var(--duration-normal)",
-                    transitionTimingFunction: "var(--ease-luxury)",
-                  }}
-                />
-              </Link>
-            ))}
-          </nav>
+                Book Now
+              </a>
 
-          {/* Book Now CTA + Mobile Toggle */}
-          <div className="flex items-center gap-4">
-            <Link
-              href="/booking"
-              className={cn(
-                "hidden sm:inline-flex items-center px-6 py-2.5 text-[12px] font-medium tracking-[0.15em] uppercase transition-all",
-                isScrolled
-                  ? "bg-gold text-dark hover:bg-bronze"
-                  : "bg-white/15 text-white border border-white/30 hover:bg-white/25"
-              )}
-              style={{
-                transitionDuration: "var(--duration-normal)",
-                transitionTimingFunction: "var(--ease-luxury)",
-              }}
-            >
-              Book Now
-            </Link>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={cn(
-                "lg:hidden relative z-[60] p-2 transition-colors",
-                isMobileMenuOpen
-                  ? "text-white"
-                  : isScrolled
-                    ? "text-dark"
-                    : "text-white"
-              )}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={cn(
+                  "lg:hidden relative z-[60] p-2 transition-colors",
+                  isMobileMenuOpen
+                    ? "text-white"
+                    : isScrolled
+                      ? "text-dark"
+                      : "text-white"
+                )}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -175,7 +203,10 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="font-[family-name:var(--font-heading)] text-2xl md:text-3xl text-white/90 hover:text-gold tracking-[0.08em] uppercase transition-colors"
+                    className={cn(
+                      "font-[family-name:var(--font-heading)] text-2xl md:text-3xl tracking-[0.08em] uppercase transition-colors",
+                      isActiveLink(link.href) ? "text-gold" : "text-white/90 hover:text-gold"
+                    )}
                     style={{ transitionDuration: "var(--duration-fast)" }}
                   >
                     {link.label}
@@ -193,13 +224,15 @@ export default function Navbar() {
                 }}
                 className="mt-4"
               >
-                <Link
-                  href="/booking"
+                <a
+                  href={BRAND.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="btn-primary"
                 >
                   <span>Book Your Stay</span>
-                </Link>
+                </a>
               </motion.div>
 
               {/* Decorative Line */}
@@ -218,9 +251,9 @@ export default function Navbar() {
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 hidden md:block">
         <Link
           href="/contact"
-          className="block bg-black text-[#F5F1EB] hover:bg-[#CFA785] hover:text-black border-l border-t border-b border-gold/30 px-4 py-8 uppercase tracking-[0.25em] text-[12px] font-semibold transition-all duration-300 shadow-lg [writing-mode:vertical-lr]"
+          className="block bg-black text-[#F5F1EB] hover:bg-[#CFA785] hover:text-black border-l border-t border-b border-gold/30 px-2.5 py-4 uppercase tracking-[0.2em] text-[10px] font-semibold transition-all duration-300 shadow-lg [writing-mode:vertical-lr]"
           style={{
-            letterSpacing: "0.25em",
+            letterSpacing: "0.2em",
             boxShadow: "-6px 6px 24px rgba(0, 0, 0, 0.2)"
           }}
         >

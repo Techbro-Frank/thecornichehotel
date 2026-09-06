@@ -37,29 +37,9 @@ function IconFacebook({ size = 16 }: { size?: number }) {
     </svg>
   );
 }
-function IconTwitter({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-      <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-    </svg>
-  );
-}
-function IconLinkedin({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
-
 const socialIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   instagram: IconInstagram,
   facebook: IconFacebook,
-  twitter: IconTwitter,
-  linkedin: IconLinkedin,
 };
 
 const containerVariants = {
@@ -75,51 +55,53 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-export default function Footer() {
+export default function Footer({ hideNewsletter = false }: { hideNewsletter?: boolean }) {
   return (
     <footer className="bg-dark text-white">
       {/* Newsletter Section */}
-      <div className="border-b border-white/10">
-        <div className="container-luxury py-16 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-            <div>
-              <p className="label-uppercase !text-gold mb-4">Stay Connected</p>
-              <h3 className="font-[family-name:var(--font-heading)] text-2xl md:text-3xl text-white tracking-wide">
-                Subscribe to Our Newsletter
-              </h3>
-              <p className="mt-3 text-white/50 max-w-md">
-                Receive exclusive offers, event invitations, and insider access
-                to The Corniche experience.
-              </p>
-            </div>
+      {!hideNewsletter && (
+        <div className="border-b border-white/10">
+          <div className="container-luxury py-8 md:py-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+              <div>
+                <p className="label-uppercase !text-gold mb-4">Stay Connected</p>
+                <h3 className="font-[family-name:var(--font-heading)] text-2xl md:text-3xl text-white tracking-wide">
+                  Subscribe to Our Newsletter
+                </h3>
+                <p className="mt-3 text-white/50 max-w-md">
+                  Receive exclusive offers, event invitations, and insider access
+                  to The Corniche experience.
+                </p>
+              </div>
 
-            <form
-              className="flex flex-col sm:flex-row gap-3"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-1 bg-white/5 border border-white/15 px-5 py-3.5 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-gold transition-colors"
-                style={{ transitionDuration: "var(--duration-normal)" }}
-                aria-label="Email address for newsletter"
-              />
-              <button
-                type="submit"
-                className="btn-primary !py-3.5 flex-shrink-0 group"
+              <form
+                className="flex flex-col sm:flex-row gap-3"
+                onSubmit={(e) => e.preventDefault()}
               >
-                <span className="flex items-center gap-2">
-                  Subscribe
-                  <ArrowRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </span>
-              </button>
-            </form>
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="flex-1 bg-white/5 border border-white/15 px-5 py-3.5 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-gold transition-colors"
+                  style={{ transitionDuration: "var(--duration-normal)" }}
+                  aria-label="Email address for newsletter"
+                />
+                <button
+                  type="submit"
+                  className="btn-primary !py-3.5 flex-shrink-0 group"
+                >
+                  <span className="flex items-center gap-2">
+                    Subscribe
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </span>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Footer */}
       <motion.div
@@ -127,13 +109,13 @@ export default function Footer() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="container-luxury py-16 md:py-20"
+        className="container-luxury py-8 md:py-10"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand Column */}
           <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
-              <span className="font-[family-name:var(--font-heading)] text-xl tracking-[0.15em] uppercase text-white">
+              <span className="font-[family-name:var(--font-heading)] text-xl tracking-[0.15em] uppercase text-white whitespace-nowrap">
                 The Corniche
               </span>
               <br />
@@ -213,29 +195,20 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href="/special-offers"
                   className="text-sm text-white/50 hover:text-white transition-colors"
                   style={{ transitionDuration: "var(--duration-fast)" }}
                 >
-                  Terms & Conditions
+                  Special Offers
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/booking"
+                  href="/contact"
                   className="text-sm text-white/50 hover:text-white transition-colors"
                   style={{ transitionDuration: "var(--duration-fast)" }}
                 >
-                  Book a Room
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="text-sm text-white/50 hover:text-white transition-colors"
-                  style={{ transitionDuration: "var(--duration-fast)" }}
-                >
-                  Blog
+                  Contact Us
                 </Link>
               </li>
             </ul>
@@ -263,6 +236,16 @@ export default function Footer() {
               </li>
               <li>
                 <a
+                  href={`tel:${BRAND.restaurantPhone}`}
+                  className="flex gap-3 text-sm text-white/50 hover:text-white transition-colors"
+                  style={{ transitionDuration: "var(--duration-fast)" }}
+                >
+                  <Phone size={16} className="text-gold flex-shrink-0 mt-0.5" />
+                  <span>{BRAND.restaurantPhone} <span className="text-white/30">(Bistro)</span></span>
+                </a>
+              </li>
+              <li>
+                <a
                   href={`mailto:${BRAND.email}`}
                   className="flex gap-3 text-sm text-white/50 hover:text-white transition-colors"
                   style={{ transitionDuration: "var(--duration-fast)" }}
@@ -278,7 +261,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
-        <div className="container-luxury py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="container-luxury py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[12px] text-white/30 tracking-wide">
             &copy; {new Date().getFullYear()} The Corniche Hotel. All rights
             reserved.
