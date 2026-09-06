@@ -4,7 +4,10 @@
  *   direction-aware hover overlay. On mouse enter, the overlay slides in from the
  *   direction the cursor entered (top/right/bottom/left), revealing the room name
  *   and price with a triple-line gold border frame animation. Uses Framer Motion
- *   for overlay transitions and supports 9 room types from Standard to Presidential.
+ *   for overlay transitions. Room data (name, price, cover photo) comes from the
+ *   shared rooms-data module via a prop — passed down from the (Server Component)
+ *   homepage — so pricing can never drift out of sync with the Rooms & Suites
+ *   pages again; there is exactly one place prices are defined.
  */
 
 "use client";
@@ -13,63 +16,9 @@ import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import Image from "next/image";
 import SectionHeading from "@/components/shared/section-heading";
+import type { RoomDetails } from "@/lib/rooms-data";
 
-/** Room type definition for the showcase cards. */
-interface Room {
-  name: string;
-  price: string;
-  image: string;
-}
-
-const showcaseRooms: Room[] = [
-  {
-    name: "Standard Room",
-    price: "From ₦95,000 / Night",
-    image: "/images/Standard Room/IMG_8013.jpg",
-  },
-  {
-    name: "Executive Double",
-    price: "From ₦125,000 / Night",
-    image: "/images/Executive Double /IMG_8938.jpg",
-  },
-  {
-    name: "Signature Executive",
-    price: "From ₦140,000 / Night",
-    image: "/images/Signature Executive/IMG_0541.jpg",
-  },
-  {
-    name: "Kings Room",
-    price: "From ₦150,000 / Night",
-    image: "/images/King’s room/IMG_5596.jpg",
-  },
-  {
-    name: "Studio Apartment",
-    price: "From ₦160,000 / Night",
-    image: "/images/Studio Apartment/IMG_1128.jpg",
-  },
-  {
-    name: "Signature Room",
-    price: "From ₦170,000 / Night",
-    image: "/images/Signature Room/IMG_4372.jpg",
-  },
-  {
-    name: "Executive Suite",
-    price: "From ₦200,000 / Night",
-    image: "/images/Executive Suite/IMG_4215.jpg",
-  },
-  {
-    name: "Signature Suite",
-    price: "From ₦250,000 / Night",
-    image: "/images/Signature Suite/IMG_4400.jpg",
-  },
-  {
-    name: "Presidential Suite",
-    price: "From ₦270,000 / Night",
-    image: "/images/Presidential Suite/IMG_4500.jpg",
-  },
-];
-
-function ShowcaseCard({ room }: { room: Room }) {
+function ShowcaseCard({ room }: { room: RoomDetails }) {
   const [hoverDirection, setHoverDirection] = useState<"top" | "right" | "bottom" | "left" | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -186,7 +135,7 @@ function ShowcaseCard({ room }: { room: Room }) {
       className="relative overflow-hidden aspect-[4/3.2] w-full bg-dark-soft cursor-pointer group"
     >
       <Image
-        src={room.image}
+        src={room.images[0]}
         alt={room.name}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -235,12 +184,12 @@ function ShowcaseCard({ room }: { room: Room }) {
   );
 }
 
-export default function RoomShowcase() {
+export default function RoomShowcase({ rooms }: { rooms: RoomDetails[] }) {
   return (
     <section className="section-padding bg-beige-light/30 flex flex-col items-center justify-center w-full" id="room-showcase">
       <div className="max-w-5xl w-full mx-auto px-6 md:px-8 flex flex-col items-center justify-center">
         {/* Siam Hotel Style Classical Stepped-Notch Header Box */}
-        <div className="flex flex-col items-center justify-center text-center mb-12 w-full">
+        <div className="flex flex-col items-center justify-center text-center mb-6 w-full">
           <span className="text-xs uppercase tracking-[0.3em] text-gold font-medium mb-6">
             Visual Gallery
           </span>
@@ -276,9 +225,9 @@ export default function RoomShowcase() {
         </div>
 
         {/* 3x3 Grid: Centered container with gap-3 for margins/whitespace between cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-12 w-full">
-          {showcaseRooms.map((room, index) => (
-            <ShowcaseCard key={index} room={room} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+          {rooms.map((room) => (
+            <ShowcaseCard key={room.slug} room={room} />
           ))}
         </div>
       </div>

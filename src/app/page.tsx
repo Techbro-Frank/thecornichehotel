@@ -15,9 +15,12 @@ import RoomShowcase from "@/components/sections/room-showcase";
 import DiningSection from "@/components/sections/dining-section";
 import FacilitiesGrid from "@/components/sections/facilities-grid";
 import Testimonials from "@/components/sections/testimonials";
+import { getAllRooms } from "@/lib/rooms-data";
 
 /** Homepage — assembles the full landing experience with sticky hero + overlapping content. */
 export default function Home() {
+  const rooms = getAllRooms();
+
   return (
     <>
       <Navbar />
@@ -37,7 +40,7 @@ export default function Home() {
           <AboutPreview />
 
           {/* Luxury Room Showcase (Replaced Featured Rooms) */}
-          <RoomShowcase />
+          <RoomShowcase rooms={rooms} />
 
           {/* Dining Experience */}
           <DiningSection />

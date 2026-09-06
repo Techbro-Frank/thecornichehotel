@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ChevronDown } from "lucide-react";
+import { BRAND } from "@/lib/constants";
 
 /* ─── Static Hero Copy ─────────────────────────────────── */
 const labelText = "The Corniche Hotel";
@@ -195,9 +196,14 @@ export default function HeroSection() {
               isTypingComplete ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
           >
-            <Link href="/booking" className="btn-primary">
+            <a
+              href={BRAND.bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+            >
               <span>Book Your Stay</span>
-            </Link>
+            </a>
             <Link 
               href="/rooms" 
               className="btn-outline border-white/30 hover:border-gold hover:text-gold hover:bg-gold/5 relative overflow-hidden group/btn transition-colors duration-300"

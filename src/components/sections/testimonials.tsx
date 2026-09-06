@@ -10,7 +10,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote, Plus, Star, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote, Star, X } from "lucide-react";
 import SectionHeading from "@/components/shared/section-heading";
 
 /** Shape of a single guest testimonial. */
@@ -41,6 +41,55 @@ const initialTestimonials: TestimonialItem[] = [
       "We chose The Corniche for our corporate retreat and could not have been more impressed. The facilities are world-class, the food exceptional, and the team went above and beyond.",
     name: "Sarah Olumide-Williams",
     title: "Corporate Retreat",
+    rating: 5,
+  },
+  {
+    quote:
+      "From the moment our car pulled up, every detail felt considered. Our honeymoon suite overlooked the water beautifully, and the staff remembered our names for the entire stay.",
+    name: "Tunde & Chioma Bakare",
+    title: "Honeymoon Stay",
+    rating: 5,
+  },
+  {
+    quote:
+      "I travel for work across three continents, and The Corniche is now my benchmark for what a business hotel should feel like. Fast WiFi, a serene lounge, and staff that anticipate your needs.",
+    name: "Dr. Ifeanyi Nwosu",
+    title: "Business Executive",
+    rating: 5,
+  },
+  {
+    quote:
+      "Our family reunion needed a venue that could host twenty people in comfort and style. The Corniche delivered on every front, from the suites to the private dining arrangements.",
+    name: "The Adeyemi Family",
+    title: "Family Celebration",
+    rating: 5,
+  },
+  {
+    quote:
+      "As a diplomat hosting visiting delegations, discretion and polish matter enormously. The Corniche's team handled every logistical detail with quiet professionalism.",
+    name: "Ambassador Grace Effiong",
+    title: "Diplomatic Visit",
+    rating: 5,
+  },
+  {
+    quote:
+      "Booked a solo staycation to unwind, and left feeling completely restored. The spa treatments were exceptional, and the quiet, elegant atmosphere made all the difference.",
+    name: "Ngozi Chukwuemeka",
+    title: "Solo Staycation",
+    rating: 5,
+  },
+  {
+    quote:
+      "We hosted our wedding reception at The Corniche and guests are still talking about it months later. The ballroom, the cuisine, the coordination — flawless from start to finish.",
+    name: "Kunle & Amara Adeleke",
+    title: "Wedding Celebration",
+    rating: 5,
+  },
+  {
+    quote:
+      "A three-week stay for a project in Lagos could have felt impersonal, but the team treated me like a long-time resident. Housekeeping, dining, everything stayed consistently excellent.",
+    name: "Robert Ashworth",
+    title: "Extended Business Stay",
     rating: 5,
   },
 ];
@@ -94,14 +143,15 @@ export default function Testimonials() {
           light
         />
 
-        {/* Floating Rate Us Trigger */}
-        <div className="absolute right-6 top-6 md:right-8 md:top-8">
+        {/* Rate Us Trigger — centered beneath the heading, never collides with it */}
+        <div className="flex justify-center -mt-6 mb-4">
           <button
             onClick={() => setIsPopupOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#CFA785] text-black hover:bg-[#b89370] transition-colors font-medium tracking-wide text-xs uppercase shadow-lg"
+            className="group flex items-center gap-2.5 px-7 py-3 border border-[#CFA785]/40 text-[#CFA785] hover:bg-[#CFA785] hover:text-[#0F141D] transition-all font-medium tracking-[0.15em] text-xs uppercase"
+            style={{ transitionDuration: "var(--duration-normal)" }}
           >
-            <Plus size={14} />
-            Rate Us
+            <Star size={13} className="transition-transform group-hover:scale-110" style={{ transitionDuration: "var(--duration-normal)" }} />
+            Rate Your Stay
           </button>
         </div>
 
@@ -190,14 +240,14 @@ export default function Testimonials() {
       {/* Premium Rating Popup Modal */}
       <AnimatePresence>
         {isPopupOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsPopupOpen(false)}
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             />
 
             {/* Modal Body */}
@@ -206,30 +256,35 @@ export default function Testimonials() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative bg-[#171E2B] border border-[#CFA785]/20 max-w-lg w-full p-6 md:p-8 shadow-2xl z-10 text-white"
+              className="relative my-auto bg-[#171E2B] border border-[#CFA785]/20 max-w-xl w-full p-8 sm:p-10 md:p-12 shadow-2xl z-10 text-white"
             >
               {/* Close Button */}
               <button
                 onClick={() => setIsPopupOpen(false)}
-                className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors"
+                className="absolute right-5 top-5 w-9 h-9 flex items-center justify-center border border-white/15 text-white/50 hover:text-white hover:border-white/40 transition-colors"
+                style={{ transitionDuration: "var(--duration-normal)" }}
+                aria-label="Close"
               >
-                <X size={20} />
+                <X size={16} />
               </button>
 
-              <div className="text-center mb-6">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#CFA785] font-medium block mb-2">
+              <div className="text-center mb-8">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFA785] font-medium block mb-3">
                   Share Your Experience
                 </span>
-                <h3 className="font-[family-name:var(--font-heading)] text-xl md:text-2xl text-white">
+                <h3 className="font-[family-name:var(--font-heading)] text-2xl md:text-3xl text-white">
                   Rate The Corniche Hotel
                 </h3>
+                <div className="flex justify-center mt-5">
+                  <div className="divider-gold" />
+                </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* 1 to 5 Stars Input */}
                 <div className="flex flex-col items-center justify-center py-2">
-                  <span className="text-xs text-white/60 mb-2 uppercase tracking-[0.1em]">Your Rating</span>
-                  <div className="flex gap-1.5">
+                  <span className="text-xs text-white/60 mb-3 uppercase tracking-[0.15em]">Your Rating</span>
+                  <div className="flex gap-2.5">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
@@ -237,15 +292,16 @@ export default function Testimonials() {
                         onClick={() => setRating(star)}
                         onMouseEnter={() => setHoverRating(star)}
                         onMouseLeave={() => setHoverRating(null)}
-                        className="text-2xl transition-colors focus:outline-none"
+                        className="transition-transform hover:scale-110 focus:outline-none"
+                        style={{ transitionDuration: "var(--duration-fast)" }}
                       >
                         <Star
-                          size={28}
+                          size={32}
                           fill={star <= (hoverRating ?? rating) ? "#CFA785" : "transparent"}
                           className={
                             star <= (hoverRating ?? rating)
                               ? "text-[#CFA785]"
-                              : "text-white/20 hover:text-white"
+                              : "text-white/20 hover:text-white/50"
                           }
                         />
                       </button>
@@ -253,9 +309,9 @@ export default function Testimonials() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5 font-medium">
+                    <label className="block text-xs uppercase tracking-wider text-white/50 mb-2 font-medium">
                       Full Name *
                     </label>
                     <input
@@ -264,11 +320,12 @@ export default function Testimonials() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Adewale Johnson"
-                      className="w-full bg-white/5 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[#CFA785] transition-colors"
+                      className="w-full bg-white/5 border border-white/10 px-4 py-3.5 text-sm focus:outline-none focus:border-[#CFA785] transition-colors"
+                      style={{ transitionDuration: "var(--duration-normal)" }}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5 font-medium">
+                    <label className="block text-xs uppercase tracking-wider text-white/50 mb-2 font-medium">
                       Title / Type of Stay
                     </label>
                     <input
@@ -276,13 +333,14 @@ export default function Testimonials() {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="e.g. Business Stay"
-                      className="w-full bg-white/5 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[#CFA785] transition-colors"
+                      className="w-full bg-white/5 border border-white/10 px-4 py-3.5 text-sm focus:outline-none focus:border-[#CFA785] transition-colors"
+                      style={{ transitionDuration: "var(--duration-normal)" }}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5 font-medium">
+                  <label className="block text-xs uppercase tracking-wider text-white/50 mb-2 font-medium">
                     Your Review *
                   </label>
                   <textarea
@@ -291,13 +349,15 @@ export default function Testimonials() {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="Tell us about the service, dining, or suite comfort..."
-                    className="w-full bg-white/5 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[#CFA785] transition-colors resize-none"
+                    className="w-full bg-white/5 border border-white/10 px-4 py-3.5 text-sm focus:outline-none focus:border-[#CFA785] transition-colors resize-none"
+                    style={{ transitionDuration: "var(--duration-normal)" }}
                   />
                 </div>
 
                 <button
                   type="submit"
                   className="w-full bg-[#CFA785] hover:bg-[#b89370] text-black py-4 transition-colors font-medium tracking-[0.15em] text-xs uppercase shadow-lg mt-2"
+                  style={{ transitionDuration: "var(--duration-normal)" }}
                 >
                   Submit Review
                 </button>
