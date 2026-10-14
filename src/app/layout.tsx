@@ -11,6 +11,7 @@ import { playfairDisplay, inter } from "@/lib/fonts";
 import LenisProvider from "@/providers/lenis-provider";
 import QueryProvider from "@/providers/query-provider";
 import JsonLd from "@/components/seo/json-ld";
+import WhatsAppFloatButton from "@/components/shared/whatsapp-float-button";
 import { buildHotelSchema, DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -89,6 +90,7 @@ export default function RootLayout({
         <QueryProvider>
           <LenisProvider>{children}</LenisProvider>
         </QueryProvider>
+        <WhatsAppFloatButton />
       </body>
     </html>
   );
