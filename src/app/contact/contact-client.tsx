@@ -118,15 +118,17 @@ export default function ContactClient() {
                       style={{ transitionDuration: "var(--duration-fast)" }}
                     />
                   </div>
-                  <button type="submit" className="btn-primary group">
-                    <span className="flex items-center gap-2">
-                      Send
-                      <ArrowRight
-                        size={14}
-                        className="transition-transform group-hover:translate-x-1"
-                      />
-                    </span>
-                  </button>
+                  <div className="flex max-sm:justify-end">
+                    <button type="submit" className="btn-primary group">
+                      <span className="flex items-center gap-2">
+                        Send
+                        <ArrowRight
+                          size={14}
+                          className="transition-transform group-hover:translate-x-1"
+                        />
+                      </span>
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
