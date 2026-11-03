@@ -64,8 +64,8 @@ export default function RoomsClient({ rooms }: { rooms: RoomDetails[] }) {
           {/* Top horizontal line running fully edge to edge (100vw) */}
           <div className="w-screen h-[1px] bg-dark/15" />
 
-          <div className="py-8 flex items-center justify-center">
-            <h1 className="font-[family-name:var(--font-body)] text-3xl md:text-4xl text-dark tracking-[0.25em] uppercase font-light text-center">
+          <div className="py-8 px-6 flex items-center justify-center">
+            <h1 className="font-[family-name:var(--font-body)] text-2xl sm:text-3xl md:text-4xl text-dark tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] uppercase font-light text-center">
               Rooms & Suites
             </h1>
           </div>
