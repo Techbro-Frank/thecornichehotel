@@ -8,7 +8,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote, Star, X } from "lucide-react";
 import SectionHeading from "@/components/shared/section-heading";
@@ -105,6 +106,12 @@ export default function Testimonials() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [hoverRating, setHoverRating] = useState<number | null>(null);
+
+  // Portal the modal to document.body — rendered in place, it would be
+  // trapped inside the homepage's z-10 overlapping-content stacking context
+  // and end up underneath the fixed navbar despite its own z-50.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const prev = () =>
     setCurrent((c) => (c === 0 ? items.length - 1 : c - 1));
@@ -238,7 +245,8 @@ export default function Testimonials() {
       </div>
 
       {/* Premium Rating Popup Modal */}
-      <AnimatePresence>
+      {mounted && createPortal(
+        <AnimatePresence>
         {isPopupOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
             {/* Backdrop */}
@@ -365,7 +373,9 @@ export default function Testimonials() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 }
