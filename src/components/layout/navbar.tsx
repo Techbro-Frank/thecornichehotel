@@ -157,20 +157,21 @@ export default function Navbar() {
                 Book Now
               </a>
 
-              {/* Mobile Menu Toggle */}
+              {/* Mobile Menu Toggle — only opens; the overlay owns its own
+                  close button so the two never fight over z-index. Disabled
+                  while open since it sits underneath the overlay anyway. */}
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={() => setIsMobileMenuOpen(true)}
+                disabled={isMobileMenuOpen}
+                tabIndex={isMobileMenuOpen ? -1 : 0}
+                aria-hidden={isMobileMenuOpen}
                 className={cn(
                   "lg:hidden relative z-[60] p-2 transition-colors",
-                  isMobileMenuOpen
-                    ? "text-white"
-                    : isScrolled
-                      ? "text-dark"
-                      : "text-white"
+                  isMobileMenuOpen ? "text-white" : isScrolled ? "text-dark" : "text-white"
                 )}
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-label="Open menu"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                <Menu size={24} />
               </button>
             </div>
           </div>
@@ -187,6 +188,19 @@ export default function Navbar() {
             transition={{ duration: 0.4 }}
             className="fixed inset-0 z-[55] bg-dark"
           >
+            {/* Close button — rendered inside the overlay itself (not the
+                header) so it's never at the mercy of header/overlay z-index
+                ordering, which otherwise collides with other fixed-position
+                overlays (e.g. the testimonials review modal) elsewhere on
+                the site. */}
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute right-4 top-4 sm:right-6 sm:top-6 z-10 p-2 text-white"
+              aria-label="Close menu"
+            >
+              <X size={24} />
+            </button>
+
             <div className="flex flex-col items-center justify-center h-full gap-8">
               {NAV_LINKS.map((link, index) => (
                 <motion.div
