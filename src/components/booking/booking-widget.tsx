@@ -9,7 +9,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
@@ -31,6 +32,12 @@ export default function BookingWidget() {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Portal the modal to document.body — rendered in place on the homepage,
+  // it's trapped inside the overlapping-content container's z-10 stacking
+  // context and ends up underneath the fixed navbar despite its own z-100.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Get tomorrow and day after for default min dates
   const today = new Date();
@@ -180,7 +187,8 @@ export default function BookingWidget() {
       </div>
 
       {/* "Coming Soon" Modal */}
-      <AnimatePresence>
+      {mounted && createPortal(
+        <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
             <motion.div
@@ -259,7 +267,9 @@ export default function BookingWidget() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </motion.section>
   );
 }
