@@ -111,8 +111,8 @@ export default function PrivacyPolicyPage() {
         {/* Banner */}
         <div className="w-full mb-10 flex flex-col items-center justify-center">
           <div className="w-screen h-[1px] bg-dark/15" />
-          <div className="py-8">
-            <h1 className="font-[family-name:var(--font-body)] text-3xl md:text-4xl text-dark tracking-[0.25em] uppercase font-light text-center">
+          <div className="py-8 px-6">
+            <h1 className="font-[family-name:var(--font-body)] text-2xl sm:text-3xl md:text-4xl text-dark tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] uppercase font-light text-center">
               Privacy Policy
             </h1>
           </div>
