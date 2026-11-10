@@ -15,6 +15,10 @@ import { buildRoomSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/json-ld";
 import RoomDetailClient from "./room-detail-client";
 
+// Only the prerendered room slugs exist; anything else is a static 404 rather
+// than a runtime render that would need the image folders on the server.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getAllRooms().map((room) => ({ slug: room.slug }));
 }
