@@ -144,7 +144,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     folder: "Signature Executive",
     coverFile: "IMG_0541.jpg",
     name: "Signature Executive",
-    price: "From ₦140,000 / Night",
+    price: "From ₦160,000 / Night",
     size: 30,
     maxAdults: 2,
     maxChildren: 1,

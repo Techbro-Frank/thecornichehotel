@@ -83,7 +83,7 @@ export function buildHotelSchema() {
       "Lounge & Bar",
       "High-Speed WiFi",
       "24/7 Security",
-      "Spa & Wellness",
+      "Laundry Service",
       "24-Hour Concierge",
     ].map((name) => ({ "@type": "LocationFeatureSpecification", name, value: true })),
     starRating: { "@type": "Rating", ratingValue: "5" },

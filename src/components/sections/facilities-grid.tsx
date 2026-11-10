@@ -18,7 +18,7 @@ import {
   Car,
   Wifi,
   ShieldCheck,
-  Sparkles,
+  WashingMachine,
 } from "lucide-react";
 import SectionHeading from "@/components/shared/section-heading";
 
@@ -30,7 +30,7 @@ const facilities = [
   { icon: Wine, name: "Lounge & Bar", description: "Curated cocktails in an elegant atmosphere" },
   { icon: Wifi, name: "High-Speed WiFi", description: "Complimentary fibre connection throughout" },
   { icon: ShieldCheck, name: "24/7 Security", description: "Advanced security & in-room safe" },
-  { icon: Sparkles, name: "Spa & Wellness", description: "Signature treatments & relaxation therapies" },
+  { icon: WashingMachine, name: "Laundry Service", description: "Same-day laundry & pressing on request" },
 ];
 
 export default function FacilitiesGrid() {

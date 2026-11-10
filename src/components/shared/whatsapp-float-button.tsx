@@ -25,14 +25,16 @@ import { X } from "lucide-react";
 import { BRAND } from "@/lib/constants";
 import WhatsAppIcon from "@/components/shared/whatsapp-icon";
 
-const WHATSAPP_MESSAGE = "Hi, I'd like to know more about The Corniche Hotel.";
+const HOTEL_MESSAGE = "Hi, I'd like to know more about The Corniche Hotel.";
+const BISTRO_MESSAGE = "Hi, I'd like to know more about The Corniche Bistro.";
 const DRAG_CLICK_THRESHOLD = 5;
 
 export default function WhatsAppFloatButton() {
   const constraintsRef = useRef<HTMLDivElement>(null);
   const didDrag = useRef(false);
   const [isOpen, setIsOpen] = useState(false);
-  const url = `https://wa.me/${BRAND.phone.replace(/\D/g, "")}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const hotelUrl = `https://wa.me/${BRAND.phone.replace(/\D/g, "")}?text=${encodeURIComponent(HOTEL_MESSAGE)}`;
+  const bistroUrl = `https://wa.me/${BRAND.restaurantPhone.replace(/\D/g, "")}?text=${encodeURIComponent(BISTRO_MESSAGE)}`;
 
   return (
     <div ref={constraintsRef} className="fixed inset-0 z-40 pointer-events-none">
@@ -76,15 +78,37 @@ export default function WhatsAppFloatButton() {
                   Hi there! 👋 How can we help you today?
                 </div>
 
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1fbd5a] text-white py-3 rounded-lg transition-colors duration-300 text-sm font-medium"
-                >
-                  <WhatsAppIcon size={18} />
-                  Chat on WhatsApp
-                </a>
+                <div className="mt-3 space-y-1.5">
+                  <a
+                    href={hotelUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 rounded-lg bg-beige px-3 py-2 hover:bg-beige/70 transition-colors"
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
+                      <WhatsAppIcon size={13} />
+                    </span>
+                    <span className="min-w-0 leading-tight">
+                      <span className="block text-[11px] font-medium text-dark">Hotel Line</span>
+                      <span className="block text-[11px] text-muted">{BRAND.phone}</span>
+                    </span>
+                  </a>
+
+                  <a
+                    href={bistroUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 rounded-lg bg-beige px-3 py-2 hover:bg-beige/70 transition-colors"
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
+                      <WhatsAppIcon size={13} />
+                    </span>
+                    <span className="min-w-0 leading-tight">
+                      <span className="block text-[11px] font-medium text-dark">Corniche Bistro Line</span>
+                      <span className="block text-[11px] text-muted">{BRAND.restaurantPhone}</span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}
