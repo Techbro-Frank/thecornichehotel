@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  logWebhookEvent("paystack", body.event ?? "unknown", rawBody, signatureValid);
+  await logWebhookEvent("paystack", body.event ?? "unknown", rawBody, signatureValid);
 
   if (!signatureValid) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   }
 
   const reference = body.data?.reference;
-  const order = reference ? getOrderByReference(reference) : undefined;
+  const order = reference ? await getOrderByReference(reference) : undefined;
   if (order) {
     await confirmPaidOrder(order.id);
   }

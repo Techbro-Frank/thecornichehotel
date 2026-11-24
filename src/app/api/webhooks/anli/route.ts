@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  logWebhookEvent("anli", body.eventType ?? body.event ?? "unknown", rawBody, signatureValid);
+  await logWebhookEvent("anli", body.eventType ?? body.event ?? "unknown", rawBody, signatureValid);
 
   if (!signatureValid) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   if (NOTIFIABLE_EVENTS.includes(eventType)) {
     const bookingCode = typeof body.data?.bookingCode === "string" ? body.data.bookingCode : undefined;
     const label = EVENT_LABELS[eventType] ?? eventType;
-    createNotification(
+    await createNotification(
       `anli_${eventType.toLowerCase()}`,
       label,
       bookingCode ? `${label} — ${bookingCode}` : label

@@ -1,34 +1,32 @@
 /**
- * @file Local dev database — orders, webhook log, front-desk notifications
- * @description SQLite file at .data/corniche.db, used only while the booking
- *   engine is developed locally. One `orders` row per Paystack payment (covers
- *   the whole lifecycle: pending -> paid -> confirmed/failed), with one
- *   `order_items` row per room line in the cart — a guest can book several
- *   different rooms/date-ranges under a single payment, and each line becomes
- *   its own Anli reservation (Anli's create-booking call only takes one room
- *   type at a time). Kept behind this one file so swapping to Postgres later
- *   only means rewriting the functions in orders.ts, not every call site.
+ * @file Database — orders, webhook log, front-desk notifications
+ * @description libSQL (Turso in production, a local file in dev — same
+ *   client, same SQL, just a different url). Replaced better-sqlite3 after
+ *   discovering it can't work on Vercel: a deployed serverless function's
+ *   filesystem is read-only, so a local .db file there throws on every
+ *   write. Turso is SQLite-compatible and reachable over the network, so the
+ *   schema and queries barely changed — just the client and the "await".
  */
 
-import path from "path";
 import fs from "fs";
-import Database from "better-sqlite3";
-
-const DB_DIR = path.join(process.cwd(), ".data");
-const DB_PATH = path.join(DB_DIR, "corniche.db");
+import path from "path";
+import { createClient, type Client } from "@libsql/client";
 
 declare global {
   // eslint-disable-next-line no-var
-  var __corniche_db__: Database.Database | undefined;
+  var __corniche_db__: Promise<Client> | undefined;
 }
 
-function createDb(): Database.Database {
-  fs.mkdirSync(DB_DIR, { recursive: true });
-  const db = new Database(DB_PATH);
-  db.pragma("journal_mode = WAL");
+async function createDb(): Promise<Client> {
+  const url = process.env.TURSO_DATABASE_URL;
+  const authToken = process.env.TURSO_AUTH_TOKEN;
 
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS orders (
+  const client = url
+    ? createClient({ url, authToken })
+    : createClient({ url: `file:${localDbPath()}` });
+
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS orders (
       id TEXT PRIMARY KEY,
       amount_naira INTEGER NOT NULL,
       currency TEXT NOT NULL DEFAULT 'NGN',
@@ -42,9 +40,8 @@ function createDb(): Database.Database {
       paystack_reference TEXT UNIQUE NOT NULL,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS order_items (
+    )`,
+    `CREATE TABLE IF NOT EXISTS order_items (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       order_id TEXT NOT NULL REFERENCES orders(id),
       room_slug TEXT NOT NULL,
@@ -60,18 +57,16 @@ function createDb(): Database.Database {
       status TEXT NOT NULL DEFAULT 'pending'
         CHECK (status IN ('pending','confirmed','anli_sync_failed')),
       anli_booking_code TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS webhook_events (
+    )`,
+    `CREATE TABLE IF NOT EXISTS webhook_events (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       source TEXT NOT NULL CHECK (source IN ('anli','paystack')),
       event_type TEXT NOT NULL,
       raw_payload TEXT NOT NULL,
       signature_valid INTEGER NOT NULL,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS notifications (
+    )`,
+    `CREATE TABLE IF NOT EXISTS notifications (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       type TEXT NOT NULL,
       title TEXT NOT NULL,
@@ -79,13 +74,23 @@ function createDb(): Database.Database {
       booking_id TEXT,
       is_read INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
+    )`,
+  ];
 
-  return db;
+  for (const sql of statements) {
+    await client.execute(sql);
+  }
+
+  return client;
 }
 
-export function getDb(): Database.Database {
+function localDbPath(): string {
+  const dir = path.join(process.cwd(), ".data");
+  fs.mkdirSync(dir, { recursive: true });
+  return path.join(dir, "corniche.db");
+}
+
+export function getDb(): Promise<Client> {
   if (!global.__corniche_db__) {
     global.__corniche_db__ = createDb();
   }

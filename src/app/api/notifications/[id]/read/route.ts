@@ -7,6 +7,6 @@ import { markNotificationRead } from "@/lib/orders";
 
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  markNotificationRead(Number(id));
+  await markNotificationRead(Number(id));
   return NextResponse.json({ ok: true });
 }

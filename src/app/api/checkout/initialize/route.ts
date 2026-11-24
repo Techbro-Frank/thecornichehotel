@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const order = createPendingOrder({
+  const order = await createPendingOrder({
     guestTitle: guest.title,
     guestName: guest.fullName,
     guestEmail: guest.email,
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ authorizationUrl: transaction.authorizationUrl, reference: order.id });
   } catch {
-    markOrderFailed(order.id);
+    await markOrderFailed(order.id);
     return NextResponse.json({ error: "Could not start payment — please try again." }, { status: 502 });
   }
 }

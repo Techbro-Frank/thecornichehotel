@@ -23,17 +23,17 @@ import {
 
 /** Marks the order paid and creates one Anli booking per line item. No-op if the order isn't "pending". */
 export async function confirmPaidOrder(orderId: string): Promise<void> {
-  const order = getOrderById(orderId);
+  const order = await getOrderById(orderId);
   if (!order || order.status !== "pending") {
     return; // unknown order, or already processed — idempotent no-op
   }
 
-  markOrderPaid(order.id);
+  await markOrderPaid(order.id);
 
-  const items = getOrderItems(order.id);
+  const items = await getOrderItems(order.id);
   for (const item of items) {
     if (item.anli_room_type_id == null) {
-      markOrderItemAnliSyncFailed(item.id);
+      await markOrderItemAnliSyncFailed(item.id);
       continue;
     }
     try {
@@ -47,17 +47,17 @@ export async function confirmPaidOrder(orderId: string): Promise<void> {
         externalConfirmId: `${order.id}-${item.id}`,
         numberOfGuests: item.adults + item.children,
       });
-      markOrderItemConfirmed(item.id, anliBooking?.bookingCode ?? null);
+      await markOrderItemConfirmed(item.id, anliBooking?.bookingCode ?? null);
     } catch {
-      markOrderItemAnliSyncFailed(item.id);
+      await markOrderItemAnliSyncFailed(item.id);
     }
   }
 
-  recomputeOrderStatus(order.id);
-  const finalOrder = getOrderById(order.id)!;
+  await recomputeOrderStatus(order.id);
+  const finalOrder = (await getOrderById(order.id))!;
   const roomNames = items.map((i) => i.room_name).join(", ");
 
-  createNotification(
+  await createNotification(
     finalOrder.status === "confirmed" ? "order_confirmed" : "order_needs_attention",
     finalOrder.status === "confirmed" ? "New booking confirmed" : "Booking needs front-desk attention",
     `${order.guest_name} — ${roomNames} (₦${order.amount_naira.toLocaleString()})`,

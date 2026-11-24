@@ -17,7 +17,7 @@ import { verifyTransaction, isPaystackMockMode, PaystackError } from "@/lib/pays
 
 export async function GET(_request: Request, { params }: { params: Promise<{ reference: string }> }) {
   const { reference } = await params;
-  let order = getOrderById(reference);
+  let order = await getOrderById(reference);
 
   if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -29,10 +29,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ref
       const verification = await verifyTransaction(reference);
       if (verification.status === "success") {
         await confirmPaidOrder(order.id);
-        order = getOrderById(order.id)!;
+        order = (await getOrderById(order.id))!;
       } else if (verification.status === "failed" || verification.status === "abandoned") {
-        markOrderFailed(order.id);
-        order = getOrderById(order.id)!;
+        await markOrderFailed(order.id);
+        order = (await getOrderById(order.id))!;
       }
     } catch (err) {
       // Not verified yet (e.g. guest hasn't finished paying) — keep polling, don't fail the request.
@@ -40,7 +40,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ref
     }
   }
 
-  const items = getOrderItems(order.id).map((item) => ({
+  const items = (await getOrderItems(order.id)).map((item) => ({
     roomName: item.room_name,
     checkIn: item.check_in,
     checkOut: item.check_out,
