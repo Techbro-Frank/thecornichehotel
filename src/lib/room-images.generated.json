@@ -1,0 +1,95 @@
+{
+  "Standard Room": [
+    "/images/Standard Room/IMG_8013.jpg",
+    "/images/Standard Room/IMG_0526.jpg",
+    "/images/Standard Room/IMG_8015.jpg",
+    "/images/Standard Room/IMG_8021.jpg",
+    "/images/Standard Room/IMG_8028.jpg"
+  ],
+  "Executive Double ": [
+    "/images/Executive Double /IMG_8938.jpg",
+    "/images/Executive Double /IMG_0176.jpg",
+    "/images/Executive Double /IMG_8942.jpg",
+    "/images/Executive Double /IMG_8947.jpg"
+  ],
+  "Signature Executive": [
+    "/images/Signature Executive/IMG_0541.jpg",
+    "/images/Signature Executive/IMG_0542.jpg",
+    "/images/Signature Executive/IMG_0544.jpg",
+    "/images/Signature Executive/IMG_4514.jpg",
+    "/images/Signature Executive/IMG_4520.jpg",
+    "/images/Signature Executive/IMG_4530.jpg"
+  ],
+  "Studio Apartment": [
+    "/images/Studio Apartment/IMG_1128.jpg",
+    "/images/Studio Apartment/IMG_1134.jpg",
+    "/images/Studio Apartment/IMG_1136.jpg",
+    "/images/Studio Apartment/IMG_5277.jpg",
+    "/images/Studio Apartment/IMG_5281.jpg",
+    "/images/Studio Apartment/IMG_5284.jpg",
+    "/images/Studio Apartment/IMG_5285.jpg",
+    "/images/Studio Apartment/IMG_5287.jpg",
+    "/images/Studio Apartment/IMG_5301.jpg",
+    "/images/Studio Apartment/IMG_5319.jpg",
+    "/images/Studio Apartment/IMG_5327.jpg"
+  ],
+  "Presidential Suite": [
+    "/images/Presidential Suite/IMG_4500.jpg",
+    "/images/Presidential Suite/IMG_4286.jpg",
+    "/images/Presidential Suite/IMG_4295.jpg",
+    "/images/Presidential Suite/IMG_4298.jpg",
+    "/images/Presidential Suite/IMG_4318.jpg",
+    "/images/Presidential Suite/IMG_4327.jpg",
+    "/images/Presidential Suite/IMG_4332.jpg",
+    "/images/Presidential Suite/IMG_4350.jpg",
+    "/images/Presidential Suite/IMG_4436.jpg",
+    "/images/Presidential Suite/IMG_4486.jpg",
+    "/images/Presidential Suite/IMG_4489.jpg",
+    "/images/Presidential Suite/IMG_4494.jpg",
+    "/images/Presidential Suite/IMG_4502.jpg",
+    "/images/Presidential Suite/IMG_4508.jpg",
+    "/images/Presidential Suite/IMG_4511.jpg",
+    "/images/Presidential Suite/IMG_5086.jpg",
+    "/images/Presidential Suite/IMG_5094.jpg",
+    "/images/Presidential Suite/IMG_5140.jpg",
+    "/images/Presidential Suite/IMG_5145.jpg"
+  ],
+  "Signature Suite": [
+    "/images/Signature Suite/IMG_4400.jpg",
+    "/images/Signature Suite/IMG_4415.jpg",
+    "/images/Signature Suite/IMG_4418.jpg",
+    "/images/Signature Suite/IMG_5503.jpg",
+    "/images/Signature Suite/IMG_5511.jpg",
+    "/images/Signature Suite/IMG_5516.jpg",
+    "/images/Signature Suite/IMG_5524.jpg",
+    "/images/Signature Suite/IMG_5571.jpg",
+    "/images/Signature Suite/IMG_5578.jpg",
+    "/images/Signature Suite/IMG_5589.jpg",
+    "/images/Signature Suite/IMG_5593.jpg"
+  ],
+  "Executive Suite": [
+    "/images/Executive Suite/IMG_4215.jpg",
+    "/images/Executive Suite/IMG_4224.jpg",
+    "/images/Executive Suite/IMG_4229.jpg",
+    "/images/Executive Suite/IMG_4232.jpg",
+    "/images/Executive Suite/IMG_5419.jpg",
+    "/images/Executive Suite/IMG_5456.jpg"
+  ],
+  "Signature Room": [
+    "/images/Signature Room/IMG_4372.jpg",
+    "/images/Signature Room/IMG_4382.jpg",
+    "/images/Signature Room/IMG_4385.jpg",
+    "/images/Signature Room/IMG_5445.jpg",
+    "/images/Signature Room/IMG_5446.jpg",
+    "/images/Signature Room/IMG_5447.jpg",
+    "/images/Signature Room/IMG_5448.jpg",
+    "/images/Signature Room/IMG_5451.jpg",
+    "/images/Signature Room/IMG_5456.jpg"
+  ],
+  "King’s room": [
+    "/images/King’s room/IMG_5596.jpg",
+    "/images/King’s room/IMG_5597.jpg",
+    "/images/King’s room/IMG_5598.jpg",
+    "/images/King’s room/IMG_5599.jpg"
+  ]
+}

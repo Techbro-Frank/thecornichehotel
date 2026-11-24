@@ -1,9 +1,16 @@
 /**
  * @file Rooms Data — Server-only room catalogue
- * @description Single source of truth for every room type: its photo folder
- *   (read from disk so new photos just work), pricing/specs, and the full
- *   characteristics copy shown on each room's detail page. Shared by the
- *   Rooms & Suites listing page and each room's dynamic detail page.
+ * @description Single source of truth for every room type: its photos,
+ *   pricing/specs, and the full characteristics copy shown on each room's
+ *   detail page. Shared by the Rooms & Suites listing page, each room's
+ *   dynamic detail page, and the live-availability API routes.
+ *
+ *   Photo lists come from room-images.generated.json, not a runtime
+ *   `fs.readdirSync` — next.config.ts deliberately excludes public/** from
+ *   each serverless function's bundle (it's 350MB+ of photos, well past
+ *   Vercel's function size limit), so on a real deploy those files simply
+ *   aren't there for a function to read at request time. Re-run
+ *   `node scripts/generate-room-images.mjs` after adding/removing photos.
  *
  *   Note: the characteristics text for Studio Apartment, Presidential Suite,
  *   Signature Suite, Executive Suite, Signature Room, and Kings Room was
@@ -12,8 +19,7 @@
  *   list) — that's worth revisiting with real per-room copy later.
  */
 
-import fs from "fs";
-import path from "path";
+import roomImages from "@/lib/room-images.generated.json";
 import { isChannelManagerMockMode } from "@/lib/channel-manager";
 
 export interface RoomDetails {
@@ -263,28 +269,16 @@ function slugify(name: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-/** Reads a room's photo folder from disk, curated cover shot first, rest sorted after. */
-function getRoomImages(folder: string, coverFile: string): string[] {
-  const dir = path.join(process.cwd(), "public", "images", folder);
-  try {
-    const files = fs
-      .readdirSync(dir)
-      .filter((f) => /\.(jpe?g|png|webp)$/i.test(f))
-      .sort();
-    const ordered = files.includes(coverFile)
-      ? [coverFile, ...files.filter((f) => f !== coverFile)]
-      : files;
-    return ordered.map((f) => `/images/${folder}/${f}`);
-  } catch {
-    return [];
-  }
+/** Pre-generated ordered image list for a room's photo folder — see file header. */
+function getRoomImages(folder: string): string[] {
+  return (roomImages as Record<string, string[]>)[folder] ?? [];
 }
 
 export function getAllRooms(): RoomDetails[] {
-  return ROOM_CONFIGS.map(({ folder, coverFile, ...rest }) => ({
+  return ROOM_CONFIGS.map(({ folder, coverFile: _coverFile, ...rest }) => ({
     ...rest,
     slug: slugify(rest.name),
-    images: getRoomImages(folder, coverFile),
+    images: getRoomImages(folder),
   })).filter((room) => room.images.length > 0);
 }
 
