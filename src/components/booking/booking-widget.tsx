@@ -2,49 +2,39 @@
  * @file BookingWidget — Floating booking bar with date & guest selection
  * @description Glassmorphism-styled booking widget that sits at the hero/content
  *   transition point. Provides check-in/check-out date pickers with min-date logic,
- *   and adult/child counters. Live availability search isn't wired up to a PMS
- *   yet, so "Check Availability" opens a modal explaining that, pointing guests
- *   to the phone/email or the real ANLI booking link instead of a dead search.
+ *   and adult/child counters. "Check Availability" routes to /book with the
+ *   picked dates carried in the query string, where live availability is
+ *   actually checked — this no longer sends guests to the external Anli link.
  */
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Users,
-  Baby,
-  Search,
-  ChevronDown,
-  ChevronUp,
-  X,
-  Phone,
-  Mail,
-} from "lucide-react";
-import { BRAND } from "@/lib/constants";
-import WhatsAppIcon from "@/components/shared/whatsapp-icon";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Users, Baby, Search, ChevronDown, ChevronUp } from "lucide-react";
+import { todayISO, addDaysISO } from "@/lib/utils";
 
-/** Booking widget with date pickers, guest counters, and a "coming soon" availability modal. */
+/** Booking widget with date pickers and guest counters, routing to /book on search. */
 export default function BookingWidget() {
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const router = useRouter();
+  const [checkIn, setCheckIn] = useState(todayISO());
+  const [checkOut, setCheckOut] = useState(todayISO(1));
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Portal the modal to document.body — rendered in place on the homepage,
-  // it's trapped inside the overlapping-content container's z-10 stacking
-  // context and ends up underneath the fixed navbar despite its own z-100.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const minCheckIn = todayISO();
+  const minCheckOut = addDaysISO(checkIn, 1);
 
-  // Get tomorrow and day after for default min dates
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minCheckIn = today.toISOString().split("T")[0];
-  const minCheckOut = checkIn || tomorrow.toISOString().split("T")[0];
+  function goToBookingPage() {
+    const qs = new URLSearchParams({
+      checkIn,
+      checkOut,
+      adults: String(adults),
+      children: String(children),
+    });
+    router.push(`/book?${qs.toString()}`);
+  }
 
   return (
     <motion.section
@@ -69,10 +59,9 @@ export default function BookingWidget() {
                   value={checkIn}
                   min={minCheckIn}
                   onChange={(e) => {
-                    setCheckIn(e.target.value);
-                    if (checkOut && e.target.value >= checkOut) {
-                      setCheckOut("");
-                    }
+                    const next = e.target.value;
+                    setCheckIn(next);
+                    if (checkOut <= next) setCheckOut(addDaysISO(next, 1));
                   }}
                   className="w-full px-4 py-3 bg-white border border-border text-sm text-dark focus:outline-none focus:border-gold transition-colors cursor-pointer"
                   style={{ transitionDuration: "var(--duration-fast)" }}
@@ -173,10 +162,7 @@ export default function BookingWidget() {
             </div>
 
             {/* Search Button */}
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="btn-primary w-full !py-3 group"
-            >
+            <button onClick={goToBookingPage} className="btn-primary w-full !py-3 group">
               <span className="flex items-center justify-center gap-2">
                 <Search size={16} />
                 Check Availability
@@ -185,91 +171,6 @@ export default function BookingWidget() {
           </div>
         </div>
       </div>
-
-      {/* "Coming Soon" Modal */}
-      {mounted && createPortal(
-        <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="relative bg-white max-w-md w-full p-8 sm:p-10 shadow-2xl z-10 text-center"
-            >
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute right-5 top-5 w-9 h-9 flex items-center justify-center border border-border text-muted hover:text-dark hover:border-dark transition-colors"
-                style={{ transitionDuration: "var(--duration-normal)" }}
-                aria-label="Close"
-              >
-                <X size={16} />
-              </button>
-
-              <p className="label-uppercase mb-3">Coming Soon</p>
-              <h3 className="heading-3 text-dark mb-4">
-                Live Availability, On Its Way
-              </h3>
-              <p className="text-sm text-muted leading-relaxed mb-8">
-                Our interactive room availability search isn&rsquo;t live
-                just yet. In the meantime, our team is happy to help you
-                directly — or you can book instantly through our official
-                booking portal.
-              </p>
-
-              <div className="space-y-3 mb-8">
-                <a
-                  href={`tel:${BRAND.phone}`}
-                  className="flex items-center justify-center gap-2 text-sm text-dark hover:text-gold transition-colors"
-                  style={{ transitionDuration: "var(--duration-fast)" }}
-                >
-                  <Phone size={15} className="text-gold" />
-                  {BRAND.phone}
-                </a>
-                <a
-                  href={`mailto:${BRAND.email}`}
-                  className="flex items-center justify-center gap-2 text-sm text-dark hover:text-gold transition-colors"
-                  style={{ transitionDuration: "var(--duration-fast)" }}
-                >
-                  <Mail size={15} className="text-gold" />
-                  {BRAND.email}
-                </a>
-              </div>
-
-              <a
-                href={`https://wa.me/${BRAND.phone.replace(/\D/g, "")}?text=${encodeURIComponent(
-                  "Hi, I'd like to check room availability at The Corniche Hotel."
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1fbd5a] text-white py-4 transition-colors duration-300 font-medium tracking-[0.1em] text-xs uppercase mb-3"
-              >
-                <WhatsAppIcon size={16} />
-                Chat on WhatsApp
-              </a>
-
-              <a
-                href={BRAND.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary w-full"
-              >
-                <span>Book Now Instead</span>
-              </a>
-            </motion.div>
-          </div>
-        )}
-        </AnimatePresence>,
-        document.body
-      )}
     </motion.section>
   );
 }

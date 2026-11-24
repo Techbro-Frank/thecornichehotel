@@ -46,7 +46,7 @@ const nextConfig: NextConfig = {
       // Old booking page -> the live booking engine
       {
         source: "/check-availability/:path*",
-        destination: "https://www.weareanli.com/corniche-hotel/8/booking",
+        destination: "/book",
         permanent: true,
       },
       // Renamed pages
@@ -63,8 +63,6 @@ const nextConfig: NextConfig = {
       { source: "/wp-content/:path*", destination: home, permanent: true },
       { source: "/product/:path*", destination: rooms, permanent: true },
       { source: "/shop/:path*", destination: rooms, permanent: true },
-      { source: "/cart", destination: home, permanent: true },
-      { source: "/checkout/:path*", destination: home, permanent: true },
       { source: "/my-account/:path*", destination: home, permanent: true },
     ];
   },

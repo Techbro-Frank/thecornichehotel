@@ -14,11 +14,14 @@
 
 import fs from "fs";
 import path from "path";
+import { isChannelManagerMockMode } from "@/lib/channel-manager";
 
 export interface RoomDetails {
   slug: string;
   name: string;
   price: string;
+  /** Anli PMS room-type id, once mapped via GET /channel-manager/hotels/8/roomtypes — null until then. */
+  anliRoomTypeId: number | null;
   images: string[];
   size: number;
   maxAdults: number;
@@ -61,6 +64,7 @@ interface RoomConfig {
   coverFile: string;
   name: string;
   price: string;
+  anliRoomTypeId: number | null;
   size: number;
   maxAdults: number;
   maxChildren: number;
@@ -74,6 +78,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_8013.jpg",
     name: "Standard Room",
     price: "From ₦120,000 / Night",
+    anliRoomTypeId: 15, // Anli room type "Standard"
     size: 15,
     maxAdults: 2,
     maxChildren: 1,
@@ -110,6 +115,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_8938.jpg",
     name: "Executive Double",
     price: "From ₦145,000 / Night",
+    anliRoomTypeId: 17, // Anli room type "Executive Double"
     size: 26,
     maxAdults: 2,
     maxChildren: 1,
@@ -145,6 +151,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_0541.jpg",
     name: "Signature Executive",
     price: "From ₦160,000 / Night",
+    anliRoomTypeId: 16, // Anli room type "Signature Executive"
     size: 30,
     maxAdults: 2,
     maxChildren: 1,
@@ -180,6 +187,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_1128.jpg",
     name: "Studio Apartment",
     price: "From ₦180,000 / Night",
+    anliRoomTypeId: 18, // Anli room type "Studio Apartment"
     size: 45,
     maxAdults: 4,
     maxChildren: 1,
@@ -191,6 +199,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_4500.jpg",
     name: "Presidential Suite",
     price: "From ₦270,000 / Night",
+    anliRoomTypeId: 90, // Anli room type "Presidential Suite"
     size: 45,
     maxAdults: 4,
     maxChildren: 1,
@@ -202,6 +211,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_4400.jpg",
     name: "Signature Suite",
     price: "From ₦250,000 / Night",
+    anliRoomTypeId: 89, // Anli room type "Signature Suite"
     size: 45,
     maxAdults: 4,
     maxChildren: 1,
@@ -213,6 +223,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_4215.jpg",
     name: "Executive Suite",
     price: "From ₦200,000 / Night",
+    anliRoomTypeId: 88, // Anli room type "Executive Suite"
     size: 45,
     maxAdults: 4,
     maxChildren: 1,
@@ -224,6 +235,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_4372.jpg",
     name: "Signature Room",
     price: "From ₦170,000 / Night",
+    anliRoomTypeId: 87, // Anli room type "Signature Room"
     size: 45,
     maxAdults: 4,
     maxChildren: 1,
@@ -235,6 +247,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     coverFile: "IMG_5596.jpg",
     name: "Kings Room",
     price: "From ₦150,000 / Night",
+    anliRoomTypeId: 86, // Anli room type "King's Room"
     size: 45,
     maxAdults: 4,
     maxChildren: 1,
@@ -277,4 +290,26 @@ export function getAllRooms(): RoomDetails[] {
 
 export function getRoomBySlug(slug: string): RoomDetails | undefined {
   return getAllRooms().find((room) => room.slug === slug);
+}
+
+/**
+ * The Anli room-type id to actually use for a room: the real mapped one once
+ * it exists, otherwise a stable local id for CHANNEL_MANAGER_MOCK (index+1 in
+ * the catalogue) so local dev has *something* to key availability/pricing off
+ * of. Both /api/availability and /api/checkout/initialize call this so they
+ * never disagree about which id a room resolves to.
+ */
+export function getEffectiveRoomTypeId(slug: string): number | null {
+  const rooms = getAllRooms();
+  const index = rooms.findIndex((r) => r.slug === slug);
+  if (index === -1) return null;
+  const room = rooms[index];
+  if (room.anliRoomTypeId != null) return room.anliRoomTypeId;
+  return isChannelManagerMockMode ? index + 1 : null;
+}
+
+/** Pulls the naira figure out of a display string like "From ₦160,000 / Night" -> 160000. */
+export function parsePriceNaira(price: string): number {
+  const digits = price.replace(/[^\d]/g, "");
+  return digits ? Number(digits) : 0;
 }

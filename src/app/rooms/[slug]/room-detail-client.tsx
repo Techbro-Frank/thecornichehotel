@@ -1,11 +1,11 @@
 /**
  * @file Room Detail — Interactive client component
- * @description Full-detail view for a single room: an animated inline photo
- *   gallery, the room's characteristics and feature list, a Book Now CTA, the
- *   same booking widget used on the homepage (its "Check Availability" opens
- *   the shared "coming soon" modal), and — scrolling further — every other
- *   room type in the same card style as the main Rooms & Suites listing, so
- *   guests can keep browsing without leaving the detail-page context.
+ * @description Full-detail view for a single room: a multi-photo gallery with
+ *   a full lightbox, the room's characteristics and feature list, an inline
+ *   booking panel (check real availability and add this room to the cart
+ *   without leaving the page), and — scrolling further — every other room
+ *   type in the same card style as the main Rooms & Suites listing, so guests
+ *   can keep browsing without leaving the detail-page context.
  */
 
 "use client";
@@ -15,10 +15,10 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Check } from "lucide-react";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
-import BookingWidget from "@/components/booking/booking-widget";
 import RoomGallery from "@/components/rooms/room-gallery";
+import RoomBookingPanel from "@/components/rooms/room-booking-panel";
 import RoomCard from "@/components/rooms/room-card";
-import { BRAND, CHECK_IN_TIME, CHECK_OUT_TIME } from "@/lib/constants";
+import { CHECK_IN_TIME, CHECK_OUT_TIME } from "@/lib/constants";
 import type { RoomDetails } from "@/lib/rooms-data";
 
 const fadeUp = {
@@ -105,29 +105,12 @@ export default function RoomDetailClient({
               transition={{ delay: 0.3 }}
               className="lg:col-span-1"
             >
-              <div className="lg:sticky lg:top-28 bg-white border border-border p-6">
-                <p className="label-uppercase mb-2">Rate</p>
-                <p className="font-[family-name:var(--font-heading)] text-2xl text-dark mb-5">
-                  {room.price}
-                </p>
-                <a href={BRAND.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn-primary w-full">
-                  <span>Book Your Stay</span>
-                </a>
+              <div className="lg:sticky lg:top-28">
+                <RoomBookingPanel room={room} />
               </div>
             </motion.div>
           </div>
         </div>
-
-        {/* Availability widget — full width, same component as the homepage */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={fadeUp}
-        >
-          <p className="label-uppercase text-center mb-6">Check Availability</p>
-          <BookingWidget />
-        </motion.div>
 
         <div className="container-luxury">
           {/* Explore Other Rooms */}

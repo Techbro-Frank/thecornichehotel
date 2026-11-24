@@ -1,89 +1,77 @@
 /**
- * @file RoomGallery — Inline animated photo gallery for a room detail page
- * @description A large crossfading hero image with a scrollable thumbnail
- *   strip below it — distinct from the Ikoyi/listing lightbox modal, since
- *   this lives inline in the page rather than as an overlay. Arrows, a
- *   counter, and click-any-thumbnail navigation make it easy to browse every
- *   photo for the room.
+ * @file RoomGallery — Continuously sliding photo strip for a room detail page
+ * @description Every photo for the room scrolls past in one continuous,
+ *   looping strip (not capped at 3 with a "+N Photos" overlay) — it keeps
+ *   moving the whole time the guest is on the page, including while they're
+ *   working through dates/guests in the booking panel alongside it. Clicking
+ *   any tile opens the same PhotoGalleryModal lightbox (used by Rooms &
+ *   Suites and Ikoyi Apartments too) to browse the full set at full size.
  */
 
 "use client";
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import PhotoGalleryModal from "@/components/shared/photo-gallery-modal";
 
 export default function RoomGallery({ images, alt }: { images: string[]; alt: string }) {
+  const [isOpen, setIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const goPrev = () => setIndex((i) => (i === 0 ? images.length - 1 : i - 1));
-  const goNext = () => setIndex((i) => (i === images.length - 1 ? 0 : i + 1));
+  if (images.length === 0) return null;
+
+  function openAt(i: number) {
+    setIndex(i);
+    setIsOpen(true);
+  }
+
+  // Duplicated once so the loop can wrap seamlessly: animating the track from
+  // 0% to -50% scrolls exactly one full pass of the real photos before the
+  // (identical) second copy takes over, so the seam is invisible.
+  const track = images.length > 1 ? [...images, ...images] : images;
+  const durationSeconds = Math.max(images.length, 2) * 5;
 
   return (
     <div className="w-full">
-      <div className="relative w-full aspect-[2/1] bg-dark-soft overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={images[index]}
-              alt={`${alt} — photo ${index + 1}`}
-              fill
-              sizes="(max-width: 1024px) 100vw, 66vw"
-              className="object-contain"
-              priority
-            />
-          </motion.div>
-        </AnimatePresence>
-
-        {images.length > 1 && (
-          <>
+      <div className="relative w-full overflow-hidden">
+        <motion.div
+          className="flex gap-2 md:gap-3 w-max"
+          animate={images.length > 1 ? { x: ["0%", "-50%"] } : undefined}
+          transition={{ duration: durationSeconds, ease: "linear", repeat: Infinity }}
+        >
+          {track.map((img, i) => (
             <button
-              onClick={goPrev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/40 hover:bg-black/60 text-white transition-colors"
-              style={{ transitionDuration: "var(--duration-normal)" }}
-              aria-label="Previous photo"
+              key={`${img}-${i}`}
+              type="button"
+              onClick={() => openAt(i % images.length)}
+              className="relative flex-shrink-0 w-[260px] sm:w-[340px] md:w-[420px] aspect-[16/11] overflow-hidden bg-beige-light group"
             >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={goNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/40 hover:bg-black/60 text-white transition-colors"
-              style={{ transitionDuration: "var(--duration-normal)" }}
-              aria-label="Next photo"
-            >
-              <ChevronRight size={20} />
-            </button>
-            <div className="absolute bottom-4 right-4 bg-black/50 text-white text-xs px-3 py-1.5 tracking-wider">
-              {index + 1} / {images.length}
-            </div>
-          </>
-        )}
-      </div>
-
-      {images.length > 1 && (
-        <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
-          {images.map((img, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`relative flex-shrink-0 w-20 h-16 md:w-24 md:h-20 overflow-hidden transition-all duration-300 ${
-                i === index ? "ring-2 ring-gold opacity-100" : "opacity-60 hover:opacity-90"
-              }`}
-              aria-label={`View photo ${i + 1}`}
-            >
-              <Image src={img} alt="" fill sizes="100px" className="object-cover" />
+              <Image
+                src={img}
+                alt={`${alt} — photo ${(i % images.length) + 1}`}
+                fill
+                sizes="(max-width: 768px) 340px, 420px"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                priority={i === 0}
+              />
             </button>
           ))}
-        </div>
-      )}
+        </motion.div>
+
+        {/* Edge fades so tiles read as continuously sliding past rather than cut off mid-frame. */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 md:w-16 bg-gradient-to-r from-beige to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 md:w-16 bg-gradient-to-l from-beige to-transparent" />
+      </div>
+
+      <PhotoGalleryModal
+        images={images}
+        alt={alt}
+        isOpen={isOpen}
+        index={index}
+        onIndexChange={setIndex}
+        onClose={() => setIsOpen(false)}
+      />
     </div>
   );
 }

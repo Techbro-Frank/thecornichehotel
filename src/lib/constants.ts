@@ -9,8 +9,6 @@ export const BRAND = {
   restaurantPhone: "+234 903 470 0000",
   email: "cornichehotelng@gmail.com",
   website: "https://thecornichehotel.com",
-  /** Live ANLI PMS booking link — every "Book Now" CTA site-wide points here. */
-  bookingUrl: "https://www.weareanli.com/corniche-hotel/8/booking",
 } as const;
 
 export const NAV_LINKS = [

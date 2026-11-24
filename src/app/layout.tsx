@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { playfairDisplay, inter } from "@/lib/fonts";
 import LenisProvider from "@/providers/lenis-provider";
 import QueryProvider from "@/providers/query-provider";
+import { CartProvider } from "@/contexts/cart-context";
 import JsonLd from "@/components/seo/json-ld";
 import WhatsAppFloatButton from "@/components/shared/whatsapp-float-button";
 import { buildHotelSchema, DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
@@ -88,7 +89,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-beige text-dark font-[family-name:var(--font-body)]">
         <JsonLd data={buildHotelSchema()} />
         <QueryProvider>
-          <LenisProvider>{children}</LenisProvider>
+          <CartProvider>
+            <LenisProvider>{children}</LenisProvider>
+          </CartProvider>
         </QueryProvider>
         <WhatsAppFloatButton />
       </body>

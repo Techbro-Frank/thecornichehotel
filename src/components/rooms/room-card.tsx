@@ -10,8 +10,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import HoverImageCard from "@/components/shared/hover-image-card";
-import { BRAND } from "@/lib/constants";
 import type { RoomDetails } from "@/lib/rooms-data";
 
 export const roomCardVariants = {
@@ -66,10 +66,8 @@ export default function RoomCard({ room, compact = false }: { room: RoomDetails;
 
         {/* CTA Buttons */}
         <div className={compact ? "flex flex-col gap-2 w-full" : "flex gap-3 w-full justify-center"}>
-          <a
-            href={BRAND.bookingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/book"
             className={
               compact
                 ? "w-full border border-[#CFA785] hover:bg-[#CFA785] hover:text-black transition-colors duration-300 text-[10px] font-medium uppercase tracking-[0.1em] py-2"
@@ -77,7 +75,7 @@ export default function RoomCard({ room, compact = false }: { room: RoomDetails;
             }
           >
             Book Now
-          </a>
+          </Link>
           <div
             className={
               compact

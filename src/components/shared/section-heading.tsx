@@ -23,6 +23,8 @@ interface SectionHeadingProps {
   align?: "left" | "center";
   light?: boolean;
   className?: string;
+  /** Tighter internal spacing for pages where the content below needs to sit closer to the fold. */
+  compact?: boolean;
 }
 
 export default function SectionHeading({
@@ -32,6 +34,7 @@ export default function SectionHeading({
   align = "center",
   light = false,
   className,
+  compact = false,
 }: SectionHeadingProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +68,7 @@ export default function SectionHeading({
     <div
       ref={containerRef}
       className={cn(
-        "mb-8 md:mb-10",
+        compact ? "mb-4 md:mb-6" : "mb-8 md:mb-10",
         align === "center" && "text-center",
         className
       )}
@@ -73,7 +76,7 @@ export default function SectionHeading({
       {label && (
         <p
           className={cn(
-            "label-uppercase mb-4",
+            compact ? "label-uppercase mb-2" : "label-uppercase mb-4",
             light ? "!text-gold-light" : "!text-gold"
           )}
         >
@@ -91,7 +94,7 @@ export default function SectionHeading({
       </h2>
 
       {align === "center" && (
-        <div className="flex justify-center mt-5">
+        <div className={cn("flex justify-center", compact ? "mt-3" : "mt-5")}>
           <div className="divider-gold" />
         </div>
       )}
@@ -99,7 +102,8 @@ export default function SectionHeading({
       {description && (
         <p
           className={cn(
-            "mt-5 max-w-2xl text-base leading-relaxed",
+            compact ? "mt-3" : "mt-5",
+            "max-w-2xl text-base leading-relaxed",
             align === "center" && "mx-auto",
             light ? "text-white/60" : "text-muted"
           )}

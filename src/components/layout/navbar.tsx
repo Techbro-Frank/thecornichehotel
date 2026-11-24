@@ -8,14 +8,15 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { BRAND, NAV_LINKS } from "@/lib/constants";
+import { Menu, X, ShoppingBag, ArrowRight } from "lucide-react";
+import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/contexts/cart-context";
 
 /** Pages that keep the nav permanently visible/sticky from mount. */
 const ALWAYS_VISIBLE_PATHS = [
@@ -26,6 +27,9 @@ const ALWAYS_VISIBLE_PATHS = [
   "/dining",
   "/special-offers",
   "/privacy",
+  "/book",
+  "/cart",
+  "/checkout",
 ];
 
 /** Adaptive navbar with scroll-based transparency and mobile menu overlay. */
@@ -34,9 +38,50 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { itemCount, lastAddedAt } = useCart();
+  const [showGoToCart, setShowGoToCart] = useState(false);
+  const cycleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasItems = itemCount > 0;
 
   const isActiveLink = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // Nudge the guest toward the cart for as long as there's something in it —
+  // not a one-shot pop after adding, but a slow, repeating loop: slide out
+  // from the icon, hold, retract, rest, repeat. `lastAddedAt` in the deps
+  // restarts the cycle (visible right away) on a fresh add, but it keeps
+  // looping on its own after that too, independent of further activity. No
+  // point nudging toward the cart once the guest is already on it or past
+  // it into checkout.
+  const onCartOrCheckout = pathname.startsWith("/cart") || pathname.startsWith("/checkout");
+  useEffect(() => {
+    if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
+    if (!hasItems || onCartOrCheckout) {
+      setShowGoToCart(false);
+      return;
+    }
+
+    let cancelled = false;
+    const VISIBLE_MS = 4500;
+    const REST_MS = 5000;
+
+    function showPhase() {
+      if (cancelled) return;
+      setShowGoToCart(true);
+      cycleTimerRef.current = setTimeout(() => {
+        if (cancelled) return;
+        setShowGoToCart(false);
+        cycleTimerRef.current = setTimeout(showPhase, REST_MS);
+      }, VISIBLE_MS);
+    }
+    showPhase();
+
+    return () => {
+      cancelled = true;
+      if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasItems, onCartOrCheckout, lastAddedAt]);
 
   useEffect(() => {
     // Plain content pages keep the nav permanently visible/styled from mount
@@ -137,12 +182,49 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* Book Now CTA + Mobile Toggle */}
+            {/* Cart + Book Now CTA + Mobile Toggle */}
             <div className="flex items-center gap-4">
-              <a
-                href={BRAND.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/cart"
+                className={cn("relative p-1.5 transition-colors", isScrolled ? "text-dark" : "text-white")}
+                aria-label={`Cart${itemCount > 0 ? ` (${itemCount} item${itemCount === 1 ? "" : "s"})` : ""}`}
+              >
+                <ShoppingBag size={20} />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[10px] font-semibold text-dark">
+                    {itemCount}
+                    {showGoToCart && (
+                      <span className="absolute inset-0 rounded-full bg-gold animate-ping" />
+                    )}
+                  </span>
+                )}
+
+                <AnimatePresence>
+                  {showGoToCart && (
+                    <motion.span
+                      initial={{ opacity: 0, scale: 0.2, x: 14, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.2, x: 14, y: -10 }}
+                      transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+                      style={{ transformOrigin: "top right" }}
+                      className="pointer-events-none absolute top-full right-0 mt-2 z-50 whitespace-nowrap rounded-full bg-gold px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-dark shadow-lg flex items-center gap-1.5"
+                    >
+                      <motion.span
+                        animate={{ x: [0, 3, 0] }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                        className="flex items-center gap-1.5"
+                      >
+                        Go to Cart
+                        <ArrowRight size={12} />
+                      </motion.span>
+                      <span className="absolute -top-1 right-4 w-2 h-2 bg-gold rotate-45" />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </Link>
+
+              <Link
+                href="/book"
                 className={cn(
                   "hidden sm:inline-flex items-center px-6 py-2.5 text-[12px] font-medium tracking-[0.15em] uppercase transition-all",
                   isScrolled
@@ -155,7 +237,7 @@ export default function Navbar() {
                 }}
               >
                 Book Now
-              </a>
+              </Link>
 
               {/* Mobile Menu Toggle — only opens; the overlay owns its own
                   close button so the two never fight over z-index. Disabled
@@ -238,15 +320,9 @@ export default function Navbar() {
                 }}
                 className="mt-4"
               >
-                <a
-                  href={BRAND.bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="btn-primary"
-                >
+                <Link href="/book" onClick={() => setIsMobileMenuOpen(false)} className="btn-primary">
                   <span>Book Your Stay</span>
-                </a>
+                </Link>
               </motion.div>
 
               {/* Decorative Line */}
